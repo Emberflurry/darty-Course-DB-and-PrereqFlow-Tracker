@@ -11,7 +11,7 @@ class Course:
 
         self.dept = str(dept)  # 4dig
         self.number = str(coursenum)  # 3dig or 1dig.2dig or 2dig.2dig
-        
+
         # not required:
         self.title = str(coursetitle)  # duh
         self.profs = str(profs)    # eventually a list
