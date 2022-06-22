@@ -1,21 +1,23 @@
 import networkx as nx
 import plotly.graph_objects as go
 
-myG = nx.random_geometric_graph(200, 0.125) # rando testing generator
-edge_x = []
-edge_y = []
+#TODO 6/22/22: LEARN NODE AND EDGE SPECIFICS, decide how to store/retrieve/check prereqs esp cpx ones
+# start here: https://networkx.org/documentation/stable/tutorial.html
+myG = nx.random_geometric_graph(200, 0.125) # rando testing generator, replace with from DB?
+edge_xs = []
+edge_ys = []
 for edge in myG.edges():
     x0, y0 = myG.nodes[edge[0]]['pos']
     x1, y1 = myG.nodes[edge[1]]['pos']
-    edge_x.append(x0)
-    edge_x.append(x1)
-    edge_x.append(None)
-    edge_y.append(y0)
-    edge_y.append(y1)
-    edge_y.append(None)
+    edge_xs.append(x0)
+    edge_xs.append(x1)
+    edge_xs.append(None)
+    edge_ys.append(y0)
+    edge_ys.append(y1)
+    edge_ys.append(None)
 
 edge_trace = go.Scatter(
-    x=edge_x, y=edge_y,
+    x=edge_xs, y=edge_ys,
     line=dict(width=0.5, color='#888'),
     hoverinfo='none',
     mode='lines')
