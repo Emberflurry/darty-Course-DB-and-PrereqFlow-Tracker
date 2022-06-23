@@ -30,7 +30,9 @@ class Course:
         self.hasAssocLab = bool(assocLab)  # boolean
         self.credits = coursecredits  # int or float
 
-
+    # earlier version of toString method, may have things that depend on it but oh well for now (6/22/22)
+    # def __str__(self):
+    #     return self.dept + self.number + ": "+self.title+",xlist(" + str(self.xlist) + "),prqs(" + \
+    #            str(self.prereqs) + ")"
     def __str__(self):
-        return self.dept + self.number + ": "+self.title+",xlist(" + str(self.xlist) + "),prqs(" + \
-               str(self.prereqs) + ")"
+        return self.dept + self.number
