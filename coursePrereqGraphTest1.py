@@ -26,17 +26,22 @@ def crsgraphcreator(courseHash):
     allPrConditions = prereqString.split("/")
     print( allPrConditions)
 
+    orCounter = 0
     for ea in allPrConditions:
         if ":" in ea:  # OR List
             orItems = ea.strip().split(":")
             print(orItems)
-            myG.add_node("or")
-            myG.add_edge("or", courseName)
+            newOrNode = str("or"+str(orCounter))
+            myG.add_node(newOrNode)
+            myG.add_edge(newOrNode, courseName)
+            for i in orItems:
+                myG.add_edge(i,newOrNode)
+            orCounter += 1
         else:  # single course
             myG.add_edge(ea, courseName)
 
 
-print(crsgraphcreator("0008"))
+crsgraphcreator("0008")
 
 nx.draw(myG, with_labels=True, font_weight='bold')
 plt.show()
