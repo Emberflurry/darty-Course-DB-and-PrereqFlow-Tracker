@@ -2,19 +2,24 @@ import networkx as nx
 import plotly.graph_objects as go
 from courseclass import Course
 import matplotlib.pyplot as plt
+import openpyxl
+cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/deltestexp.xlsx"
+sheet1 = "MathOnly4networkTesting"
+wb_obj = openpyxl.load_workbook(cprqfile)
+print(wb_obj.sheetnames)
+mathSheet = wb_obj[wb_obj.sheetnames[0]]
 
-hash2coursenameDict = {"0001": "CHEM040",
-                       "0002": "CHEM006",
-                       "0003": "CHEM010",
-                       "0004": "PHYS013",
-                       "0005": "PHYS015",
-                       "0006": "PHYS004",
-                       "0007": "MATH008",
-                       "0008": "CHEM040",
-                       "0009": "PHYS031",
-                       "0010": "PHYS016",
-                       "0011": "PHYS014",
-                       "0012": "CHEM005"}
+hash2coursenameDict = {}
+for i in range(2, 60):
+    readHash = mathSheet.cell(row=i, column=9).value
+    print(readHash)
+    readPrereqs = mathSheet.cell(row=i, column=8).value
+    print(readPrereqs)
+    hash2coursenameDict[readHash] = readPrereqs
+
+print(hash2coursenameDict)
+print(hash2coursenameDict["0015"])
+quit()
 
 
 def get_key_by_value(find_val, dict):
@@ -33,8 +38,7 @@ for i in hash2coursenameDict:
 
 hash2prereqsDict = {"CHEM040": "MATH008/PHYS013:PHYS015:PHYS004/CHEM006:CHEM010",
                     "PHYS031": "PHYS013/PHYS016/PHYS014:PHYS015",
-                    "CHEM006": "CHEM005"
-                    }
+                    "CHEM006": "CHEM005"}
 
 global orCounter  # bc the OR nodes need to have unique IDs
 orCounter = 0
