@@ -32,11 +32,12 @@ for i in myListofCourses:
 print(myG)
 # added edges for testing, need to be able to display
 # TODO 6/22: Get display/drawing of graph working-use matplotlib.pyplot?
-nx.draw(myG,with_labels=True,font_weight='bold')
+nx.draw(myG,with_labels=True, font_weight='bold')
 plt.show()
 
 # so far so good, just need to handle ORs ANDs
 # and ofc the more complex cases
+# and cross-listing of courses - should I have them as essentially two sides/three of the same coin, or a linkage? leaning towards "coin" type framework
 
 
 
