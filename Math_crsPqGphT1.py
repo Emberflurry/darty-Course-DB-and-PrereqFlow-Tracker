@@ -10,16 +10,27 @@ print(wb_obj.sheetnames)
 mathSheet = wb_obj[wb_obj.sheetnames[0]]
 
 hash2coursenameDict = {}
+cname2prereqsDict = {}
+
 for i in range(2, 60):
     readHash = mathSheet.cell(row=i, column=9).value
     print(readHash)
-    readPrereqs = mathSheet.cell(row=i, column=8).value
-    print(readPrereqs)
-    hash2coursenameDict[readHash] = readPrereqs
+    readCourseName = mathSheet.cell(row=i, column=8).value
+    print(readCourseName)
+    hash2coursenameDict[readHash] = readCourseName
+
+    readCrsPrereqs = mathSheet.cell(row=i, column=10).value
+    print(readCrsPrereqs)
+    if readCrsPrereqs == None:
+        cname2prereqsDict[readCourseName] = ""
+    else:
+        cname2prereqsDict[readCourseName] = readCrsPrereqs
 
 print(hash2coursenameDict)
+print(cname2prereqsDict)
 print(hash2coursenameDict["0015"])
-quit()
+print(cname2prereqsDict["MATH013"])
+# quit()
 
 
 def get_key_by_value(find_val, dict):
@@ -36,9 +47,7 @@ for i in hash2coursenameDict:
 # nx.draw(G, with_labels=True, font_weight='bold')
 # plt.show()
 
-hash2prereqsDict = {"CHEM040": "MATH008/PHYS013:PHYS015:PHYS004/CHEM006:CHEM010",
-                    "PHYS031": "PHYS013/PHYS016/PHYS014:PHYS015",
-                    "CHEM006": "CHEM005"}
+
 
 global orCounter  # bc the OR nodes need to have unique IDs
 orCounter = 0
@@ -47,7 +56,7 @@ orCounter = 0
 def crsgraphcreator(courseHash):
     global orCounter
     courseName = hash2coursenameDict[courseHash]
-    prereqString = hash2prereqsDict[courseName].strip()
+    prereqString = cname2prereqsDict[courseName].strip()
     if prereqString != "" and prereqString is not None:
         allPrConditions = prereqString.split("/")
         print(allPrConditions)
@@ -71,7 +80,7 @@ def crsgraphcreator(courseHash):
         print(courseName + " hasNoPrqs")
 
 
-for eaCrs in hash2prereqsDict:  # loops over prereq dict
+for eaCrs in cname2prereqsDict:  # loops over prereq dict
     crsgraphcreator(get_key_by_value(eaCrs, hash2coursenameDict))
 # crsgraphcreator("0008")
 # crsgraphcreator("0009")
