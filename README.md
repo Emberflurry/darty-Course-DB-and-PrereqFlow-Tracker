@@ -13,3 +13,7 @@ getting situated with the NetworkX package, need to test for lots of properties 
 functionality testing w autogen nodes complete:
 ![image](https://user-images.githubusercontent.com/87039043/174941663-25838a5b-5643-408c-bc08-2caaab3e22f3.png)
 
+current progress (in coursePrereqGraphTesting1.py) on handling complex ORs and ANDs on course subset (2 lol):
+![image](https://user-images.githubusercontent.com/87039043/175473854-5da14f66-567e-40ca-af9e-354737d971f2.png)
+^rough, using matplotlib, but has all the correct connections...now to add objects/edge/node info...
+
