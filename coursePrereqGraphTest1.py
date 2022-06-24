@@ -15,6 +15,11 @@ hash2coursenameDict = {"0001": "CHEM040",
                        "0010": "PHYS016",
                        "0011": "PHYS014",
                        "0012": "CHEM005"}
+def get_key_by_value(find_val,dict):
+    for key, value in dict.items():
+        if find_val == value:
+            return key
+    return "key4: "+find_val+" DNE"
 myG = nx.DiGraph()
 for i in hash2coursenameDict:
     myG.add_node(hash2coursenameDict[i])
@@ -55,10 +60,11 @@ def crsgraphcreator(courseHash):
     else:
         print(courseName+" hasNoPrqs")
 
-
-crsgraphcreator("0008")
-crsgraphcreator("0009")
-crsgraphcreator("0002")
+for eaCrs in hash2prereqsDict:
+    crsgraphcreator(get_key_by_value(eaCrs,hash2coursenameDict))
+# crsgraphcreator("0008")
+# crsgraphcreator("0009")
+# crsgraphcreator("0002")
 
 nx.draw(myG, with_labels=True, font_weight='bold',node_color='grey')
 plt.show()
