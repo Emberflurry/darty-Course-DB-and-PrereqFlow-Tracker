@@ -11,14 +11,14 @@ hash2coursenameDict = {"0001": "CHEM040",
                        "0006": "PHYS004",
                        "0007": "MATH008",
                        "0008": "CHEM040"}
-G = nx.DiGraph()
+myG = nx.DiGraph()
 for i in hash2coursenameDict:
     # G.add_node(i)
-    G.add_node(hash2coursenameDict[i])
+    myG.add_node(hash2coursenameDict[i])
 # nx.draw(G, with_labels=True, font_weight='bold')
 # plt.show()
 
-hash2prereqsDict = {"CHEM040": "MATH008/PHYS013:PHYS015:PHYS004/CHEM006,CHEM010"}
+hash2prereqsDict = {"CHEM040": "MATH008/PHYS013:PHYS015:PHYS004/CHEM006:CHEM010"}
 
 def crsgraphcreator(courseHash):
     courseName = hash2coursenameDict[courseHash]
@@ -26,13 +26,17 @@ def crsgraphcreator(courseHash):
     allPrConditions = prereqString.split("/")
     print( allPrConditions)
 
-
-    # for ea in allPrConditions:
-    #     if ":" in ea:
-
+    for ea in allPrConditions:
+        if ":" in ea:  # OR List
+            orItems = ea.strip().split(":")
+            print(orItems)
+            myG.add_node("or")
+            myG.add_edge("or", courseName)
+        else:  # single course
+            myG.add_edge(ea, courseName)
 
 
 print(crsgraphcreator("0008"))
 
-nx.draw(G, with_labels=True, font_weight='bold')
+nx.draw(myG, with_labels=True, font_weight='bold')
 plt.show()
