@@ -49,12 +49,13 @@ for i in hash2coursenameDict:
 
 
 
-global orCounter  # bc the OR nodes need to have unique IDs
+global orCounter, andCounter  # bc the OR nodes need to have unique IDs
 orCounter = 0
+andCounter = 0
 
 
 def crsgraphcreator(courseHash):
-    global orCounter
+    global orCounter, andCounter
     courseName = hash2coursenameDict[courseHash]
     prereqString = cname2prereqsDict[courseName].strip()
     if prereqString != "" and prereqString is not None:
@@ -63,18 +64,28 @@ def crsgraphcreator(courseHash):
 
         for ea in allPrConditions:
             if ":" in ea:  # OR List
-                orItems = ea.strip().split(":")
-                print(orItems)
-
                 newOrNode = str("or" + str(orCounter))
                 myG.add_node(newOrNode)
                 myG.add_edge(newOrNode, courseName)
-
-                for eaOrPrq in orItems:
-                    myG.add_edge(eaOrPrq, newOrNode)
                 orCounter += 1
+                orItems = ea.strip().split(":")
+                print(orItems)
 
-            else:  # single course
+                for eaPrq in orItems:
+                    if "(" and ")" and "+" in eaPrq:
+                        newAndNode = str("and"+str(andCounter))
+                        myG.add_node(newAndNode)
+                        myG.add_edge(newAndNode, newOrNode)
+                        andCounter += 1
+
+                        advANDs = eaPrq.strip("(").strip(")").split("+")
+                        for q in advANDs:
+                            print("q:"+str(q))
+                            myG.add_edge(q, newAndNode)
+
+                    else:
+                        myG.add_edge(eaPrq, newOrNode)
+            elif ":" not in ea and "(" not in ea and ")" not in ea and "+" not in ea:  # single course
                 myG.add_edge(ea, courseName)
     else:
         print(courseName + " hasNoPrqs")
