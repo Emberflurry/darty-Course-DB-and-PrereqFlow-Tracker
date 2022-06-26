@@ -55,6 +55,9 @@ andCounter = 0
 
 
 def crsgraphcreator(courseHash):
+    #TODO 6/25/22 currently cannot handle 2of x level courses, etc for philosophy/other socials classes,
+    # maybe test w ors? maybe can do with just ORs and ANDs but test prereqs w type of OR node
+
     global orCounter, andCounter
     courseName = hash2coursenameDict[courseHash]
     prereqString = cname2prereqsDict[courseName].strip()
