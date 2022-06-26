@@ -6,7 +6,7 @@ import openpyxl
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/deltestexp.xlsx"
 sheet1 = "MathOnly4networkTesting"
 wb_obj = openpyxl.load_workbook(cprqfile)
-print(wb_obj.sheetnames)
+# print(wb_obj.sheetnames)
 mathSheet = wb_obj[wb_obj.sheetnames[0]]
 
 hash2coursenameDict = {}
@@ -14,9 +14,9 @@ cname2prereqsDict = {}
 
 for i in range(2, 60):
     readHash = mathSheet.cell(row=i, column=9).value
-    print(readHash)
+    # print(readHash)
     readCourseName = mathSheet.cell(row=i, column=8).value
-    print(readCourseName)
+    # print(readCourseName)
     hash2coursenameDict[readHash] = readCourseName
 
     readCrsPrereqs = mathSheet.cell(row=i, column=10).value
@@ -28,8 +28,8 @@ for i in range(2, 60):
 
 print(hash2coursenameDict)
 print(cname2prereqsDict)
-print(hash2coursenameDict["0015"])
-print(cname2prereqsDict["MATH013"])
+# print(hash2coursenameDict["0015"])
+# print(cname2prereqsDict["MATH013"])
 # quit()
 
 
@@ -61,6 +61,7 @@ def crsgraphcreator(courseHash):
     global orCounter, andCounter
     courseName = hash2coursenameDict[courseHash]
     prereqString = cname2prereqsDict[courseName].strip()
+
     if prereqString != "" and prereqString is not None:
         allPrConditions = prereqString.split("/")
         print(allPrConditions)
@@ -88,7 +89,7 @@ def crsgraphcreator(courseHash):
 
                     else:
                         myG.add_edge(eaPrq, newOrNode)
-            elif ":" not in ea and "(" not in ea and ")" not in ea and "+" not in ea:  # single course
+            elif ":" not in ea and "(" not in ea and ")" not in ea and "+" not in ea:  # =single course, simple prereq
                 myG.add_edge(ea, courseName)
     else:
         print(courseName + " hasNoPrqs")
