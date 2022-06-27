@@ -4,7 +4,7 @@ from courseclass import Course
 import matplotlib.pyplot as plt
 import openpyxl
 import re
-import jsongraph
+import jsongraph  # TODO DOES NOT FUCKING WORK, NEED TO REINSTALL ALL PYTHON SHIT CUZ VERSIONS FUCKED UP
 import urllib
 import json
 
