@@ -94,12 +94,17 @@ def crsgraphcreator(courseHash):
     else:
         print(courseName + " hasNoPrqs")
 
-
-for eaCrs in cname2prereqsDict:  # loops over prereq dict
-    crsgraphcreator(get_key_by_value(eaCrs, hash2coursenameDict))
+# TODO: FOR FULL GRAPH, uncomment:
+# for eaCrs in cname2prereqsDict:  # loops over ENTIRE MATH prereq dict
+#     crsgraphcreator(get_key_by_value(eaCrs, hash2coursenameDict))
 # crsgraphcreator("0008")
 # crsgraphcreator("0009")
 # crsgraphcreator("0002")
 
+crsgraphcreator("0047")
+
+
+
+# TO SHOW GRAPH AND DISPLAY: (uncomment)
 nx.draw(myG, with_labels=True, font_weight='bold', node_color='grey')
 plt.show()
