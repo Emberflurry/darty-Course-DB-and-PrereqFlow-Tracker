@@ -5,10 +5,9 @@ import matplotlib.pyplot as plt
 import openpyxl
 
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/deltestexp.xlsx"
-sheet1 = "MathOnly4networkTesting"
+sheet1 = "MathOnly4networkTesting"  # TODO: finish math dept prereq entry in SIF-readable CSV format, then to all depts(big)
 wb_obj = openpyxl.load_workbook(cprqfile)
 mathSheet = wb_obj[wb_obj.sheetnames[0]]
-
 
 with open('testExp.sif', 'w') as myOutFile:
     glbOrCtr = 0
@@ -37,3 +36,6 @@ with open('testExp.sif', 'w') as myOutFile:
 
                 myOutFile.write(str(ea))
                 myOutFile.write('\n')
+
+# TODO: change network display settings/etc
+# TODO: auto-open in browser/etc, also make interactive (long term, using Dash-Cytoscape.js?)
