@@ -6,7 +6,11 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 
 
 # Node Network testing:
-(6/28/22) BIG CHANGE: switched to .SIF-based Cytoscape visualization for future interactivity flexibility and for simplicity and functionality of database (most important). Note: need to open and run Cytoscape desktopApp before executing xlRead2SIFWrite1.py
+(6/28/22) Network Exports: still may work on aesthetics and readability (and ofc interactivity), but ANDs/ORs all work!
+![testExp sif](https://user-images.githubusercontent.com/87039043/176257254-527033d9-3827-434c-afb2-e389e005a400.png)
+
+
+(6/26-28/22) BIG CHANGE: switched to .SIF-based Cytoscape visualization for future interactivity flexibility and for simplicity and functionality of database (most important). Note: need to open and run Cytoscape desktopApp before executing xlRead2SIFWrite1.py
 
 still porting over all the data formats to CSV entries in ea excel row (readable to SIF format via my XL2SIF parser^), but here is a mini-network as proof of concept:
 
