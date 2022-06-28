@@ -1,0 +1,122 @@
+2022-06-27 04:50:27,780 [DEBUG] py4...: Calling cytoscape_ping()
+2022-06-27 04:50:27,780 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://127.0.0.1:1234/v1')
+2022-06-27 04:50:27,781 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-27 04:50:27,781 [DEBUG] py4...: ǀǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-27 04:50:27,854 [DEBUG] py4...: ǀǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-27 04:50:27,854 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-27 04:50:27,855 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-27 04:50:27,857 [DEBUG] py4...: Returning 'cytoscape_ping': 'You are connected to Cytoscape!'
+2022-06-27 04:50:27,858 [DEBUG] py4...: --------------------
+2022-06-27 04:50:27,858 [DEBUG] py4...: Calling cytoscape_version_info()
+2022-06-27 04:50:27,859 [DEBUG] py4...: ǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-27 04:50:27,859 [DEBUG] py4...: ǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-27 04:50:27,867 [DEBUG] py4...: ǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-27 04:50:27,868 [DEBUG] py4...: ǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-27 04:50:27,868 [DEBUG] py4...: Returning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-27 04:50:27,868 [DEBUG] py4...: --------------------
+2022-06-28 03:40:25,339 [DEBUG] py4...: Calling cytoscape_ping()
+2022-06-28 03:40:25,340 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:40:25,340 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:40:25,340 [DEBUG] py4...: ǀǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:40:25,355 [DEBUG] py4...: ǀǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:40:25,355 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:40:25,355 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:40:25,356 [DEBUG] py4...: Returning 'cytoscape_ping': 'You are connected to Cytoscape!'
+2022-06-28 03:40:25,357 [DEBUG] py4...: --------------------
+2022-06-28 03:40:25,357 [DEBUG] py4...: Calling cytoscape_version_info()
+2022-06-28 03:40:25,358 [DEBUG] py4...: ǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:40:25,358 [DEBUG] py4...: ǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:40:25,370 [DEBUG] py4...: ǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:40:25,371 [DEBUG] py4...: ǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:40:25,371 [DEBUG] py4...: Returning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:40:25,371 [DEBUG] py4...: --------------------
+2022-06-28 03:46:01,686 [DEBUG] py4...: Calling cytoscape_ping()
+2022-06-28 03:46:01,686 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:01,687 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:01,687 [DEBUG] py4...: ǀǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:46:01,702 [DEBUG] py4...: ǀǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:46:01,702 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:46:01,703 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:46:01,703 [DEBUG] py4...: Returning 'cytoscape_ping': 'You are connected to Cytoscape!'
+2022-06-28 03:46:01,704 [DEBUG] py4...: --------------------
+2022-06-28 03:46:01,704 [DEBUG] py4...: Calling cytoscape_version_info()
+2022-06-28 03:46:01,705 [DEBUG] py4...: ǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:01,705 [DEBUG] py4...: ǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:46:01,718 [DEBUG] py4...: ǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:46:01,718 [DEBUG] py4...: ǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:46:01,719 [DEBUG] py4...: Returning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:46:01,719 [DEBUG] py4...: --------------------
+2022-06-28 03:46:01,720 [DEBUG] py4...: Calling import_network_from_file('C:/Users/John DeForest/Desktop/m74test2.sif')
+2022-06-28 03:46:01,720 [DEBUG] py4...: ǀCalling commands_post('network load file file="C:\\Users\\John DeForest\\Desktop\\m74test2.sif"', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:01,721 [DEBUG] py4...: ǀHTTP POST(http://127.0.0.1:1234/v1/commands/network/load%20file), json: {'file': 'C:\\Users\\John DeForest\\Desktop\\m74test2.sif'}
+2022-06-28 03:46:01,796 [DEBUG] py4...: ǀOK[200], content: {
+ "data": { "networks":[
+  32418
+], "views":[
+  32491
+]},
+ "errors":[]
+}
+2022-06-28 03:46:01,796 [DEBUG] py4...: ǀReturning 'commands_post': {'networks': [32418], 'views': [32491]}
+2022-06-28 03:46:05,806 [DEBUG] py4...: Returning 'import_network_from_file': {'networks': [32418], 'views': [32491]}
+2022-06-28 03:46:05,807 [DEBUG] py4...: --------------------
+2022-06-28 03:46:12,614 [DEBUG] py4...: Calling cytoscape_ping()
+2022-06-28 03:46:12,614 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:12,614 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:12,615 [DEBUG] py4...: ǀǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:46:12,628 [DEBUG] py4...: ǀǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:46:12,628 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:46:12,628 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:46:12,629 [DEBUG] py4...: Returning 'cytoscape_ping': 'You are connected to Cytoscape!'
+2022-06-28 03:46:12,630 [DEBUG] py4...: --------------------
+2022-06-28 03:46:12,630 [DEBUG] py4...: Calling cytoscape_version_info()
+2022-06-28 03:46:12,630 [DEBUG] py4...: ǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:12,631 [DEBUG] py4...: ǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:46:12,642 [DEBUG] py4...: ǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:46:12,642 [DEBUG] py4...: ǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:46:12,643 [DEBUG] py4...: Returning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:46:12,643 [DEBUG] py4...: --------------------
+2022-06-28 03:46:12,643 [DEBUG] py4...: Calling import_network_from_file('C:/Users/John DeForest/Desktop/m74test2.sif')
+2022-06-28 03:46:12,644 [DEBUG] py4...: ǀCalling commands_post('network load file file="C:\\Users\\John DeForest\\Desktop\\m74test2.sif"', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:12,645 [DEBUG] py4...: ǀHTTP POST(http://127.0.0.1:1234/v1/commands/network/load%20file), json: {'file': 'C:\\Users\\John DeForest\\Desktop\\m74test2.sif'}
+2022-06-28 03:46:12,708 [DEBUG] py4...: ǀOK[200], content: {
+ "data": { "networks":[
+  32552
+], "views":[
+  32630
+]},
+ "errors":[]
+}
+2022-06-28 03:46:12,709 [DEBUG] py4...: ǀReturning 'commands_post': {'networks': [32552], 'views': [32630]}
+2022-06-28 03:46:16,720 [DEBUG] py4...: Returning 'import_network_from_file': {'networks': [32552], 'views': [32630]}
+2022-06-28 03:46:16,720 [DEBUG] py4...: --------------------
+2022-06-28 03:46:28,321 [DEBUG] py4...: Calling cytoscape_ping()
+2022-06-28 03:46:28,321 [DEBUG] py4...: ǀCalling cytoscape_version_info(base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:28,322 [DEBUG] py4...: ǀǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:28,322 [DEBUG] py4...: ǀǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:46:28,334 [DEBUG] py4...: ǀǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:46:28,335 [DEBUG] py4...: ǀǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:46:28,336 [DEBUG] py4...: ǀReturning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:46:28,336 [DEBUG] py4...: Returning 'cytoscape_ping': 'You are connected to Cytoscape!'
+2022-06-28 03:46:28,337 [DEBUG] py4...: --------------------
+2022-06-28 03:46:28,337 [DEBUG] py4...: Calling cytoscape_version_info()
+2022-06-28 03:46:28,337 [DEBUG] py4...: ǀCalling cyrest_get('version', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:28,338 [DEBUG] py4...: ǀHTTP GET(http://127.0.0.1:1234/v1/version)
+2022-06-28 03:46:28,348 [DEBUG] py4...: ǀOK[200], content: {"apiVersion":"v1","cytoscapeVersion":"3.9.1"}
+2022-06-28 03:46:28,348 [DEBUG] py4...: ǀReturning 'cyrest_get': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1'}
+2022-06-28 03:46:28,348 [DEBUG] py4...: Returning 'cytoscape_version_info': {'apiVersion': 'v1', 'cytoscapeVersion': '3.9.1', 'automationAPIVersion': '1.5.0', 'py4cytoscapeVersion': '1.3.0'}
+2022-06-28 03:46:28,349 [DEBUG] py4...: --------------------
+2022-06-28 03:46:28,349 [DEBUG] py4...: Calling import_network_from_file('C:/Users/John DeForest/Desktop/m74test2.sif')
+2022-06-28 03:46:28,350 [DEBUG] py4...: ǀCalling commands_post('network load file file="C:\\Users\\John DeForest\\Desktop\\m74test2.sif"', base_url='http://127.0.0.1:1234/v1')
+2022-06-28 03:46:28,350 [DEBUG] py4...: ǀHTTP POST(http://127.0.0.1:1234/v1/commands/network/load%20file), json: {'file': 'C:\\Users\\John DeForest\\Desktop\\m74test2.sif'}
+2022-06-28 03:46:28,406 [DEBUG] py4...: ǀOK[200], content: {
+ "data": { "networks":[
+  32686
+], "views":[
+  32740
+]},
+ "errors":[]
+}
+2022-06-28 03:46:28,407 [DEBUG] py4...: ǀReturning 'commands_post': {'networks': [32686], 'views': [32740]}
+2022-06-28 03:46:32,419 [DEBUG] py4...: Returning 'import_network_from_file': {'networks': [32686], 'views': [32740]}
+2022-06-28 03:46:32,419 [DEBUG] py4...: --------------------
