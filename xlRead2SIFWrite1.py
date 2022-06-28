@@ -21,11 +21,11 @@ with open('testExp.sif', 'w') as myOutFile:
             orDict = {}  # RESETS FOR EACH COURSE, AVOIDING OVERLAPS
             andDict = {}  # ^
             for ea in prContents:
-                print(ea)
+                print("cont "+str(ea))
                 # handle OR node renaming
                 if "%" in ea:
                     curOR_ID = ea[ea.find("%"):ea.find("%")+3]
-                    print(curOR_ID)
+                    print("cur "+str(curOR_ID))
                     if curOR_ID not in orDict:
                         # add new mapping {line% : global%} in orDict
                         if glbOrCtr >= 10:
@@ -34,42 +34,58 @@ with open('testExp.sif', 'w') as myOutFile:
                             orDict[curOR_ID] = "or0"+str(glbOrCtr)
                         # increment orCounter
                         glbOrCtr += 1
-                        print(glbOrCtr)
-                    # EITHER WAY set/replace to global mapping (new or existing mapping)
-                    ea = ea.replace(curOR_ID, orDict[curOR_ID])
+                        print("ctr"+str(glbOrCtr))
 
-                    if ea[ea.find("%")+3:].find("%") != -1:  #TODO: if OR1 -> OR2, need to run replacer again:
-                        curOR_ID = ea[ea[ea.find("%")+3:].find("%") : ea[ea.find("%")+3:].find("%")+3]
-                        print(curOR_ID)
-                        if curOR_ID not in orDict:
+                    if "%" in ea[3:]:  # if OR->OR, also remap second instance
+                        print("2nd OR found")
+                        subs = ea[3:]
+                        curOR_ID2 = subs[subs.find("%"):subs.find("%") + 3]
+                        print(curOR_ID2)
+                        if curOR_ID2 not in orDict:
                             # add new mapping {line% : global%} in orDict
                             if glbOrCtr >= 10:
-                                orDict[curOR_ID] = "or" + str(glbOrCtr)
+                                orDict[curOR_ID2] = "or" + str(glbOrCtr)
                             elif glbOrCtr < 10:
-                                orDict[curOR_ID] = "or0" + str(glbOrCtr)
+                                orDict[curOR_ID2] = "or0" + str(glbOrCtr)
                             # increment orCounter
                             glbOrCtr += 1
-                            print(glbOrCtr)
-                        # EITHER WAY set/replace to global mapping (new or existing mapping)
-                        ea = ea.replace(curOR_ID, orDict[curOR_ID])
+                            print("ctr" + str(glbOrCtr))
 
-                # handle AND node renaming
+                    # EITHER WAY set/replace to global mapping (new or existing mapping)
+                    ea = ea.replace(curOR_ID, orDict[curOR_ID])
+                    ea = ea.replace(curOR_ID2, orDict[curOR_ID2])
+
                 if "&" in ea:
-                    curAND_ID = ea[ea.find("&"):ea.find("&")+3]
-                    print(curAND_ID)
-
+                    curAND_ID = ea[ea.find("&"):ea.find("&") + 3]
+                    print("cur " + str(curAND_ID))
                     if curAND_ID not in andDict:
                         # add new mapping {line% : global%} in andDict
                         if glbAndCtr >= 10:
-                            andDict[curAND_ID] = "and"+str(glbAndCtr)
+                            andDict[curAND_ID] = "and" + str(glbAndCtr)
                         elif glbAndCtr < 10:
-                            andDict[curAND_ID] = "and0"+str(glbAndCtr)
+                            andDict[curAND_ID] = "and0" + str(glbAndCtr)
                         # increment andCounter
                         glbAndCtr += 1
-                        print(glbAndCtr)
+                        print("ctr" + str(glbAndCtr))
+
+                    if "&" in ea[3:]:  # if AND->AND, also remap second instance
+                        print("2nd AND found")
+                        subs = ea[3:]
+                        curAND_ID2 = subs[subs.find("&"):subs.find("&") + 3]
+                        print(curAND_ID2)
+                        if curOR_ID2 not in orDict:
+                            # add new mapping {line% : global%} in andDict
+                            if glbAndCtr >= 10:
+                                andDict[curAND_ID2] = "and" + str(glbAndCtr)
+                            elif glbAndCtr < 10:
+                                andDict[curAND_ID2] = "and0" + str(glbAndCtr)
+                            # increment andCounter
+                            glbAndCtr += 1
+                            print("ctr" + str(glbAndCtr))
 
                     # EITHER WAY set/replace to global mapping (new or existing mapping)
                     ea = ea.replace(curAND_ID, andDict[curAND_ID])
+                    ea = ea.replace(curAND_ID2, andDict[curAND_ID2])
 
                 myOutFile.write(str(ea))
                 myOutFile.write('\n')
