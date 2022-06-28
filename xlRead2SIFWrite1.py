@@ -5,12 +5,13 @@ import matplotlib.pyplot as plt
 import openpyxl
 
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/deltestexp.xlsx"
-sheet1 = "MathOnly4networkTesting"  # TODO: finish math dept prereq entry in SIF-readable CSV format, then to all depts(big)
+sheet1 = "MathOnly4networkTesting"
+# TODO: finish math dept prereq entry in SIF-readable CSV format (IN DELTESTEXP.xlsx), then to all depts(big)
 wb_obj = openpyxl.load_workbook(cprqfile)
 mathSheet = wb_obj[wb_obj.sheetnames[0]]
 
 with open('testExp.sif', 'w') as myOutFile:
-    glbOrCtr = 0
+    glbOrCtr = 0  # can handle up to 100 or nodes per course
     for i in range(2, mathSheet.max_row):
         prContents = str(mathSheet.cell(row=i, column=12).value).strip().split(",")
         if str(prContents) != "['None']":
