@@ -6,7 +6,8 @@ import openpyxl
 
 
 # sheet1 = "MathOnly4networkTesting"
-# TODO: finish math dept prereq entry in SIF-readable CSV format (IN DELTESTEXP.xlsx), then to all depts(big)
+# TODO: DONE: finish math dept prereq entry in SIF-readable CSV format (IN DELTESTEXP.xlsx)
+# TODO: then to all depts(big)
 # wb_obj = openpyxl.load_workbook(cprqfile)
 # mathSheet = wb_obj[wb_obj.sheetnames[0]]
 
