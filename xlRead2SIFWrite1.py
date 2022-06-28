@@ -7,12 +7,11 @@ import openpyxl
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/deltestexp.xlsx"
 sheet1 = "MathOnly4networkTesting"
 wb_obj = openpyxl.load_workbook(cprqfile)
-# print(wb_obj.sheetnames)
 mathSheet = wb_obj[wb_obj.sheetnames[0]]
 
 
 with open('testExp.sif', 'w') as myOutFile:
-    glbOrCtr=0
+    glbOrCtr = 0
     for i in range(2, mathSheet.max_row):
         prContents = str(mathSheet.cell(row=i, column=12).value).strip().split(",")
         if str(prContents) != "['None']":
@@ -38,7 +37,3 @@ with open('testExp.sif', 'w') as myOutFile:
 
                 myOutFile.write(str(ea))
                 myOutFile.write('\n')
-
-
-        #todO HANDLE MULTIPLE OR AND AND NODES-COUNTERS!
-
