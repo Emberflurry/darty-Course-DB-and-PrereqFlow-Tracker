@@ -9,6 +9,7 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 (6/28/22) BIG CHANGE: switched to .SIF-based Cytoscape visualization for future interactivity flexibility and for simplicity and functionality of database (most important)
 still porting over all the data formats to CSV (readable to SIF via my XL2SIF parser), but here is a mini-network as proof of concept:
 ![image](https://user-images.githubusercontent.com/87039043/176141378-525a8104-0ee2-4e9f-9e46-c27983e23571.png)
+
 (phew, after *many* tries with jsongraph and other libs and data structure/storage/viz options, got one to work)
 
 (6/24/22) UPDATE! Got complex AND/OR prereqs sorted and Full Math Department conversion, cleaning/fixing for DB, and most importantly, PREREQ VIZ!:
