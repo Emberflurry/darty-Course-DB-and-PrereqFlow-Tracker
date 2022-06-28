@@ -6,7 +6,6 @@ import openpyxl
 import re
 import json
 import urllib
-import json
 import scipy
 
 
