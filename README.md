@@ -6,11 +6,11 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 
 
 # Node Network testing:
-(6/28/22) Network Exports: still may work on aesthetics and readability (and ofc interactivity), but ANDs/ORs all work!
+## (6/28/22) Network Exports: still may work on aesthetics and readability (and ofc interactivity), but ANDs/ORs all work!
 ![testExp sif](https://user-images.githubusercontent.com/87039043/176257254-527033d9-3827-434c-afb2-e389e005a400.png)
+see xlRead2SIFWrite1.py for excel DB -> .SIF file (then opened and organized for aesthetics in Cytoscape)
 
-
-(6/26-28/22) BIG CHANGE: switched to .SIF-based Cytoscape visualization for future interactivity flexibility and for simplicity and functionality of database (most important). Note: need to open and run Cytoscape desktopApp before executing xlRead2SIFWrite1.py
+## (6/26-28/22) BIG CHANGE: switched to .SIF-based Cytoscape visualization for future interactivity flexibility and for simplicity and functionality of database (most important). Note: need to open and run Cytoscape desktopApp before executing xlRead2SIFWrite1.py
 
 still porting over all the data formats to CSV entries in ea excel row (readable to SIF format via my XL2SIF parser^), but here is a mini-network as proof of concept:
 
@@ -18,17 +18,17 @@ still porting over all the data formats to CSV entries in ea excel row (readable
 
 (phew, after *many* tries with jsongraph and other libs and data structure/storage/viz options, got one to work)
 
-(6/24/22) UPDATE! Got complex AND/OR prereqs sorted and Full Math Department conversion, cleaning/fixing for DB, and most importantly, PREREQ VIZ!:
+## (6/24/22) UPDATE! Got complex AND/OR prereqs sorted and Full Math Department conversion, cleaning/fixing for DB, and most importantly, PREREQ VIZ!:
 ![image](https://user-images.githubusercontent.com/87039043/175492070-3af15bf3-85bf-45d0-8070-7594085b1a15.png)
 
 ^ugly as all hell but thats not my fault. okay, maybe it is a little bit. later on will mess around with physics algos to get nicer distribution and clustering of nodes and other aesthetics
 
-(6/23/22) current progress (in coursePrereqGraphTesting1.py) on handling complex ORs and ANDs on course subset (2 lol):
+## (6/23/22) current progress (in coursePrereqGraphTesting1.py) on handling complex ORs and ANDs on course subset (2 lol):
 ![image](https://user-images.githubusercontent.com/87039043/175473854-5da14f66-567e-40ca-af9e-354737d971f2.png)
 
 ^rough, using matplotlib, but has all the correct connections...now to add objects/edge/node info...
 
-(6/21/22) getting situated with the NetworkX package, need to test for lots of properties of nodes and edges for complex prereqs but should be fine
+## (6/21/22) getting situated with the NetworkX package, need to test for lots of properties of nodes and edges for complex prereqs but should be fine
 functionality testing w autogen nodes complete:
 ![image](https://user-images.githubusercontent.com/87039043/174941663-25838a5b-5643-408c-bc08-2caaab3e22f3.png)
 
