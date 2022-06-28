@@ -13,9 +13,9 @@ mathSheet = wb_obj[wb_obj.sheetnames[0]]
 with open('testExp.sif', 'w') as myOutFile:
     glbOrCtr = 0  # can handle up to 100 or nodes per course
     glbAndCtr = 0  # ^
-    # for i in range(2, mathSheet.max_row):
-    while True:
-        i = 49
+    for i in range(2, mathSheet.max_row):
+    # while True:
+    #     i = 49
         prContents = str(mathSheet.cell(row=i, column=12).value).strip().split(",")
         if str(prContents) != "['None']":
             orDict = {}  # RESETS FOR EACH COURSE, AVOIDING OVERLAPS
@@ -89,7 +89,7 @@ with open('testExp.sif', 'w') as myOutFile:
 
                 myOutFile.write(str(ea))
                 myOutFile.write('\n')
-        break
+        # break
 
 # TODO: change network display settings/etc
 # TODO: auto-open in browser/etc, also make interactive (long term, using Dash-Cytoscape.js?)
