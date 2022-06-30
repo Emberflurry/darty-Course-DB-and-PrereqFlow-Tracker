@@ -94,4 +94,5 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
 # TODO: auto-open in browser/etc, also make interactive (long term, using Dash-Cytoscape.js?)
 
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/deltestexp.xlsx"
-xl2SIFnetworkcreator(cprqfile, 0, 2, 12, 'testExp.sif')
+#xl2SIFnetworkcreator(cprqfile, 0, 2, 12, 'testExp.sif')
+xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'MathEngs1.sif')
