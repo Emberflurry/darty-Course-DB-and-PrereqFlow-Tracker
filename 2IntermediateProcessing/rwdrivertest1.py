@@ -3,7 +3,6 @@
 # don't have linkages/backchaining set up yet w objs -- all in text format rn
 
 from courseclass import Course
-from prereqclass import Prereq
 
 # straight import from excel? current method: update master doc, copy/paste to csv, delete header, save, rerun
 

@@ -1,5 +1,4 @@
 import networkx as nx
-import plotly.graph_objects as go
 from courseclass import Course
 import matplotlib.pyplot as plt
 

@@ -1,24 +1,16 @@
-import networkx as nx
-import plotly.graph_objects as go
-from courseclass import Course
-import matplotlib.pyplot as plt
 import openpyxl
 
 
-# sheet1 = "MathOnly4networkTesting"
-# TODO: finish math dept prereq entry in SIF-readable CSV format (IN DELTESTEXP.xlsx), then to all depts(big)
-# wb_obj = openpyxl.load_workbook(cprqfile)
-# mathSheet = wb_obj[wb_obj.sheetnames[0]]
+# TODO: then to all depts(big)
 
-def xl2SIFnetworkcreator(xlWbFilePath,sheetIndex,startingRowOfEdgeEntries,columnNumofEdgeEntries,outputSIFnameAndOrPath):
+def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, columnNumofEdgeEntries,
+                         outputSIFnameAndOrPath):
     myWB = openpyxl.load_workbook(xlWbFilePath)
     mySheet = myWB[myWB.sheetnames[sheetIndex]]
     with open(outputSIFnameAndOrPath, 'w') as myOutFile:
         glbOrCtr = 0  # can handle up to 100 or nodes per course
         glbAndCtr = 0  # ^
         for i in range(startingRowOfEdgeEntries, mySheet.max_row):
-            # while True:
-            #     i = 49
             prContents = str(mySheet.cell(row=i, column=columnNumofEdgeEntries).value).strip().split(",")
             if str(prContents) != "['None']":
                 orDict = {}  # RESETS FOR EACH COURSE, AVOIDING OVERLAPS
@@ -92,8 +84,11 @@ def xl2SIFnetworkcreator(xlWbFilePath,sheetIndex,startingRowOfEdgeEntries,column
 
                     myOutFile.write(str(ea))
                     myOutFile.write('\n')
+
+
 # TODO: change network display settings/etc
 # TODO: auto-open in browser/etc, also make interactive (long term, using Dash-Cytoscape.js?)
 
-cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/deltestexp.xlsx"
-xl2SIFnetworkcreator(cprqfile,0,2,12,'testExp.sif')
+cprqfile = "C:/Users/John DeForest/Desktop/statsCourseDB.xlsx"
+#xl2SIFnetworkcreator(cprqfile, 0, 2, 12, 'testExp.sif')
+xl2SIFnetworkcreator(cprqfile, 0, 2, 8, 'MIT.sif')
