@@ -6,7 +6,7 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 
 
 # Node Network testing:
-## Moving to Dash-Cytoscape for interactive visualization given successful tests in Cytoscape for Math and Engineering departments
+## (7/6/22) Moving to Dash-Cytoscape for interactive visualization given successful tests in Cytoscape for Math and Engineering departments
 requires mods to xl-2-graph scripts, may take a bit to convert to .js-friendly format
 
 ## (6/28/22) Network Exports: still may work on aesthetics and readability (and ofc interactivity), but ANDs/ORs all work!
