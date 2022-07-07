@@ -49,8 +49,23 @@ myEdges = [{'data': {'source': source, 'target': target, 'label': myLabel}}
                ('to', 'nyc','grade >=B+'),
                ('la', 'nyc','p'),
            )]
-
 allElements = myEdges + myNodes
+myDefaultStylesheet = [
+            {'selector': 'node', 'style': {'label': 'data(label)'}},  # NODES
+            #{'selector': 'edge', 'style': {'label': 'data(label)'}},  # EDGES
+            {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
+            {'selector': 'edge', 'style':{'mid-target-arrow-color':'blue','mid-target-arrow-shape':'vee','line-color':'blue','arrow-scale':2,}}
+                        ]
+
+# directed_edges = [ # testing other edge set that had working edge arrows
+#     {'data': {'id': src+tgt, 'source': src, 'target': tgt}}
+#     for src, tgt in ['BA', 'BC', 'CD', 'DA']
+# ]
+# print(directed_edges) #demo
+# print(myEdges) #mine
+# print("asd")
+# print([{'data': {'id': id_}} for id_ in 'ABCD'] )
+
 
 myApp.layout = dhtml.Div([
     dcyto.Cytoscape(
@@ -60,11 +75,16 @@ myApp.layout = dhtml.Div([
         #             {'data': {'id': 'two', 'label': 'Node 2'}, 'position': {'x': 200, 'y': 200}},
         #             {'data': {'source': 'one', 'target': 'two','label': 'Node 1 to 2'}}
 
-        stylesheet=[
-            # {'selector': 'node', 'style': {'label': 'data(id)'}}
-            {'selector': 'node', 'style': {'label': 'data(label)'}}, # NODES
-            {'selector': 'edge', 'style': {'label': 'data(label)'}}
-        ],
+        stylesheet=myDefaultStylesheet,
+
+        # [
+        #     # {'selector': 'node', 'style': {'label': 'data(id)'}}
+        #     # {'selector': 'node', 'style': {'label': 'data(label)'}},  # NODES
+        #     # {'selector': 'edge', 'style': {'label': 'data(label)'}},  # EDGES
+        #     # {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
+        #     # {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue','mid-target-arrow-shaoe': 'vee','arrow-scale':4,'line-color':'blue'}}
+        # ],
+
         #layout={'name': 'preset'}  # for default, requires location input
         layout={'name': 'breadthfirst',  # cose for physics-based  https://dash.plotly.com/cytoscape/layout
             'roots': '[id = "nyc"]'}
