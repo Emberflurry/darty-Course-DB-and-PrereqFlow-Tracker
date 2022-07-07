@@ -2,6 +2,7 @@ import openpyxl
 import dash
 import dash_cytoscape as dcyto
 from dash import html as dhtml
+dcyto.load_extra_layouts()
 
 """Section 1: read from excel to txt w ea line
  a different edge (or node)"""
@@ -154,7 +155,9 @@ myDefaultStylesheet = [
             {'selector': 'node', 'style': {'label': 'data(id)'}},
             {'selector': 'edge', 'style': {'label': 'data(label)'}},
             {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
-            {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue', 'mid-target-arrow-shape': 'vee', 'line-color': 'blue', 'arrow-scale': 3, }}
+            {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
+                                           'mid-target-arrow-shape': 'vee',
+                                           'line-color': 'grey', 'arrow-scale': 3.5, }}
 ]
 
 myApp.layout = dhtml.Div([
@@ -163,7 +166,22 @@ myApp.layout = dhtml.Div([
         elements=myAllElements,
         stylesheet=myDefaultStylesheet,
         style={'width': '100%', 'height': '800px'},
-        layout={'name': 'breadthfirst',  # 'cose' for physics layout
+        # layout choices:
+        # ["random",  bad
+        # "preset",   If you have preset node locations, good.
+        # "circle",   not for this project
+        # "concentric", not for this project
+        # "grid",       not for this project
+        # "breadthfirst",  pretty good
+        # "cose",          too bunched
+        # added extras:------------------
+        # `cose-bilkent` can't use for some reason     https://github.com/cytoscape/cytoscape.js-cose-bilkent
+        # `cola`         nasty                         https://github.com/cytoscape/cytoscape.js-cola
+        # `euler`        crashes                       https://github.com/cytoscape/cytoscape.js-dagre
+        # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
+        # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
+        # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
+        layout={'name': 'klay',
                 'roots': '[id = "MATH001"]'}
     )
 ])
