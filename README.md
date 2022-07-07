@@ -6,6 +6,10 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 
 
 # Node Network testing:
+## (7/7/22) Converted! Dash-Cytoscape running, reworking some backend stuff...
+to optimize and clean up the graph a bit (Math 22/24 stuff and the like), but can now associate course attributes with various interactive features as I want. below is a basic viz of the Math dept - not much has changed visually since previous updates but the data linkage + capability(s) have improved enormously:
+![image](https://user-images.githubusercontent.com/87039043/177697199-4dde685e-e563-4bff-8aac-19fe1d612d34.png)
+
 ## (7/6/22) Moving to Dash-Cytoscape for interactive visualization given successful tests in Cytoscape for Math and Engineering departments
 requires mods to xl-2-graph scripts, may take a bit to convert to .js-friendly format
 
