@@ -51,7 +51,7 @@ myEdges = [{'data': {'source': source, 'target': target, 'label': myLabel}}
            )]
 allElements = myEdges + myNodes
 myDefaultStylesheet = [
-            {'selector': 'node', 'style': {'label': 'data(label)'}},  # NODES
+            {'selector': 'node', 'style': {'label': 'data(id)'}},  # NODES
             #{'selector': 'edge', 'style': {'label': 'data(label)'}},  # EDGES
             {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
             {'selector': 'edge', 'style':{'mid-target-arrow-color':'blue','mid-target-arrow-shape':'vee','line-color':'blue','arrow-scale':2,}}
