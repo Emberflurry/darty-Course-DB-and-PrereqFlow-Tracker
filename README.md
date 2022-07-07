@@ -6,6 +6,9 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 
 
 # Node Network testing:
+## (7/6/22) Moving to Dash-Cytoscape for interactive visualization given successful tests in Cytoscape for Math and Engineering departments
+requires mods to xl-2-graph scripts, may take a bit to convert to .js-friendly format
+
 ## (6/28/22) Network Exports: still may work on aesthetics and readability (and ofc interactivity), but ANDs/ORs all work!
 ![testExp sif](https://user-images.githubusercontent.com/87039043/176257254-527033d9-3827-434c-afb2-e389e005a400.png)
 see xlRead2SIFWrite1.py for excel DB -> .SIF file (then opened and organized for aesthetics in Cytoscape)
