@@ -118,18 +118,35 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                         nodeList.append(b)
                         cumNodeSet.add(mySrc)
 
-    print(nodeList)
-    print(edgeList)
-    return edgeList,nodeList
-
-
-
-
-
+    # print(nodeList)
+    # print(edgeList)
+    return nodeList, edgeList
 
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/2IntermediateProcessing/xlDBcleaning/deleteTestExportCURRENT3.xlsx"
 # xl2SIFnetworkcreator(cprqfile, 0, 2, 12, 'testExp.sif')
-print(xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'ME2.txt'))
-#TODO: this step^ is for manual checking of the reading from excel process, really can just write straight to list format
+# print(xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'ME2.txt'))
+myNodesLoL,myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'ME2.txt')
+# TODO: this txt writing step^ is for manual checking of the reading from excel process,
+#  really can just write straight to list format (as is DONE by the fn)
 
-"""Section 2: conversion of each txt line to edgeList formatting:"""
+print("--")
+print(myNodesLoL)
+print(myEdgesLoL)
+
+"""Section2: testing dash-cyto app"""
+
+myApp = dash.Dash(__name__)
+myNodes = [
+    {'data': {'id': shortID, 'label': labelID1}, }
+    for shortID, labelID1 in myNodesLoL
+]
+myEdges = [
+    {'data': {'source': sourceID, 'target': targetID, 'label': labelID2}}
+    for sourceID, targetID, labelID2 in myEdgesLoL
+]
+
+print("i--oi")
+print(myNodes)
+print(myEdges)
+
+
