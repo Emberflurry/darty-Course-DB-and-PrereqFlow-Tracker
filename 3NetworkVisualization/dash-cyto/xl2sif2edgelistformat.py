@@ -25,11 +25,11 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                 orDict = {}  # RESETS FOR EACH COURSE, AVOIDING OVERLAPS
                 andDict = {}  # ^
                 for ea in prContents:
-                    print("cont " + str(ea))
+                    # print("cont " + str(ea))
                     # handle OR node renaming
                     if "%" in ea:
                         curOR_ID = ea[ea.find("%"):ea.find("%") + 3]
-                        print("cur " + str(curOR_ID))
+                        # print("cur " + str(curOR_ID))
                         if curOR_ID not in orDict:
                             # add new mapping {line% : global%} in orDict
                             if glbOrCtr >= 10:
@@ -38,13 +38,13 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                                 orDict[curOR_ID] = "or0" + str(glbOrCtr)
                             # increment orCounter
                             glbOrCtr += 1
-                            print("ctr" + str(glbOrCtr))
+                            # print("ctr" + str(glbOrCtr))
 
                         if "%" in ea[3:]:  # if OR->OR, also remap second instance
-                            print("2nd OR found")
+                            # print("2nd OR found")
                             subs = ea[3:]
                             curOR_ID2 = subs[subs.find("%"):subs.find("%") + 3]
-                            print(curOR_ID2)
+                            # print(curOR_ID2)
                             if curOR_ID2 not in orDict:
                                 # add new mapping {line% : global%} in orDict
                                 if glbOrCtr >= 10:
@@ -53,7 +53,7 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                                     orDict[curOR_ID2] = "or0" + str(glbOrCtr)
                                 # increment orCounter
                                 glbOrCtr += 1
-                                print("ctr" + str(glbOrCtr))
+                                # print("ctr" + str(glbOrCtr))
 
                         # EITHER WAY set/replace to global mapping (new or existing mapping)
                         ea = ea.replace(curOR_ID, orDict[curOR_ID])
@@ -61,7 +61,7 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
 
                     if "&" in ea:
                         curAND_ID = ea[ea.find("&"):ea.find("&") + 3]
-                        print("cur " + str(curAND_ID))
+                        # print("cur " + str(curAND_ID))
                         if curAND_ID not in andDict:
                             # add new mapping {line% : global%} in andDict
                             if glbAndCtr >= 10:
@@ -70,13 +70,13 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                                 andDict[curAND_ID] = "and0" + str(glbAndCtr)
                             # increment andCounter
                             glbAndCtr += 1
-                            print("ctr" + str(glbAndCtr))
+                            # print("ctr" + str(glbAndCtr))
 
                         if "&" in ea[3:]:  # if AND->AND, also remap second instance
-                            print("2nd AND found")
+                            # print("2nd AND found")
                             subs = ea[3:]
                             curAND_ID2 = subs[subs.find("&"):subs.find("&") + 3]
-                            print(curAND_ID2)
+                            # print(curAND_ID2)
                             if curOR_ID2 not in orDict:
                                 # add new mapping {line% : global%} in andDict
                                 if glbAndCtr >= 10:
@@ -85,7 +85,7 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                                     andDict[curAND_ID2] = "and0" + str(glbAndCtr)
                                 # increment andCounter
                                 glbAndCtr += 1
-                                print("ctr" + str(glbAndCtr))
+                                # print("ctr" + str(glbAndCtr))
 
                         # EITHER WAY set/replace to global mapping (new or existing mapping)
                         ea = ea.replace(curAND_ID, andDict[curAND_ID])
@@ -129,9 +129,9 @@ myNodesLoL,myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'ME2.txt')  # 2n
 # TODO: this txt writing step^ is for manual checking of the reading from excel process,
 #  really can just write straight to list format (as is DONE by the fn)
 
-print("--")
-print(myNodesLoL)
-print(myEdgesLoL)
+# print("--")
+# print(myNodesLoL)
+# print(myEdgesLoL)
 
 """Section2: testing dash-cyto app"""
 
@@ -145,14 +145,14 @@ myEdges = [
     for sourceID, targetID, labelID2 in myEdgesLoL
 ]
 
-print("i--oi")
-print(myNodes)
-print(myEdges)
+# print("i--oi")
+# print(myNodes)
+# print(myEdges)
 
 myAllElements = myNodes + myEdges
 myDefaultStylesheet = [
             {'selector': 'node', 'style': {'label': 'data(id)'}},
-            # {'selector': 'edge', 'style': {'label': 'data(label)'}},
+            {'selector': 'edge', 'style': {'label': 'data(label)'}},
             {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
             {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue', 'mid-target-arrow-shape': 'vee', 'line-color': 'blue', 'arrow-scale': 3, }}
 ]
@@ -163,7 +163,7 @@ myApp.layout = dhtml.Div([
         elements=myAllElements,
         stylesheet=myDefaultStylesheet,
         style={'width': '100%', 'height': '800px'},
-        layout={'name': 'cose', # 'breadthfirst',  # 'cose' for physics layout
+        layout={'name': 'breadthfirst',  # 'cose' for physics layout
                 'roots': '[id = "MATH001"]'}
     )
 ])
