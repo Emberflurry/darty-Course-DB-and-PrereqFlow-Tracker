@@ -125,7 +125,7 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/2IntermediateProcessing/xlDBcleaning/deleteTestExportCURRENT3.xlsx"
 # xl2SIFnetworkcreator(cprqfile, 0, 2, 12, 'testExp.sif')
 # print(xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'ME2.txt'))
-myNodesLoL,myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'ME2.txt')
+myNodesLoL,myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'ME2.txt')  # 2nd param: 0 for MATH, 1 for MATH+ENGS
 # TODO: this txt writing step^ is for manual checking of the reading from excel process,
 #  really can just write straight to list format (as is DONE by the fn)
 
@@ -162,7 +162,8 @@ myApp.layout = dhtml.Div([
         id='cytoscape',
         elements=myAllElements,
         stylesheet=myDefaultStylesheet,
-        layout={'name': 'breadthfirst',  # 'cose' for physics layout
+        style={'width': '100%', 'height': '800px'},
+        layout={'name': 'cose', # 'breadthfirst',  # 'cose' for physics layout
                 'roots': '[id = "MATH001"]'}
     )
 ])
