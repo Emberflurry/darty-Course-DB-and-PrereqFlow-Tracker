@@ -149,4 +149,24 @@ print("i--oi")
 print(myNodes)
 print(myEdges)
 
+myAllElements = myNodes + myEdges
+myDefaultStylesheet = [
+            {'selector': 'node', 'style': {'label': 'data(id)'}},
+            # {'selector': 'edge', 'style': {'label': 'data(label)'}},
+            {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
+            {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue', 'mid-target-arrow-shape': 'vee', 'line-color': 'blue', 'arrow-scale': 3, }}
+]
+
+myApp.layout = dhtml.Div([
+    dcyto.Cytoscape(
+        id='cytoscape',
+        elements=myAllElements,
+        stylesheet=myDefaultStylesheet,
+        layout={'name': 'breadthfirst',  # 'cose' for physics layout
+                'roots': '[id = "MATH001"]'}
+    )
+])
+
+if __name__ == '__main__':
+    myApp.run_server(debug=True)
 
