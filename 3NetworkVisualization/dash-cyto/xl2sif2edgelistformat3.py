@@ -6,6 +6,7 @@ from dash import html as dhtml
 from dash import dcc
 from dash.dependencies import Input, Output
 import re
+import json
 
 dcyto.load_extra_layouts()
 
@@ -122,7 +123,7 @@ myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2,
 # print("--")
 print(myNodesLoL)
 # print(myEdgesLoL)
-quit()
+# quit()
 
 myApp = dash.Dash(__name__)
 
@@ -148,19 +149,20 @@ myDefaultStylesheet = [
                                    'mid-target-arrow-shape': 'vee',
                                    'line-color': 'grey', 'arrow-scale': 3.5, }}
 ]
-
+print("defined app")
 myApp.layout = dhtml.Div([
     # dropdown layou menu
-    dcc.Dropdown(
-        id='dropdown-update-layout', value='dagre', clearable=False,
-        options=[
-            {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in
-            ['dagre', 'breadthfirst', 'klay', 'euler']
-        ]
-    ),
+    # dcc.Dropdown(
+    #     id='dropdown-update-layout', value='dagre', clearable=False,
+    #     options=[
+    #         {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in
+    #         ['dagre', 'breadthfirst', 'klay', 'euler']
+    #     ]
+    # ),
     dcyto.Cytoscape(
         # id='cytoscape'
-        id='cytoscape-update-layout',  # changed to this for dropdown menu
+        # id='cytoscape-update-layout',  # changed to this for dropdown menu ONLY
+        id='cytoscape-event-callbacks-2',
         elements=myAllElements,
         stylesheet=myDefaultStylesheet,
         style={'width': '100%', 'height': '800px'},
@@ -181,15 +183,27 @@ myApp.layout = dhtml.Div([
         # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
         layout={'name': 'dagre',
                 'roots': '[id = "MATH001"]'}
-    )
+    ),
+    # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
+    dhtml.Blockquote(id='cytoscape-mouseoverNodeData-output')
+
+    # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO BAD
+    #dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
 ])
 
 
+@myApp.callback(Output('cytoscape-mouseoverNodeData-output', 'children'),
+                Input('cytoscape-event-callbacks-2', 'mouseoverNodeData'))
+def displayTapNodeData(data):
+    if data:
+        return "Hovered: " + data['label']  # og was 'label'
+
+
 # does dropdown layout menu stuff
-@myApp.callback(Output('cytoscape-update-layout', 'layout'),
-                Input('dropdown-update-layout', 'value'))
-def update_layout(layout):
-    return {'name': layout, 'animate': True}
+# @myApp.callback(Output('cytoscape-update-layout', 'layout'),
+#                 Input('dropdown-update-layout', 'value'))
+# def update_layout(layout):
+#     return {'name': layout, 'animate': True}
 
 
 if __name__ == '__main__':
