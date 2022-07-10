@@ -71,9 +71,9 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                             cumNodeSet.add(mySrc)
 
         # note: now add FLOATER NODES - ones that have no prereqs/connections
-        for i in range(startingRowOfEdgeEntries, mySheet.max_row):
-            nodeInfo = str(mySheet.cell(row=i, column=columnNumofNodeNames).value).strip()
-            courseTitle = str(mySheet.cell(row=i, column=columnNumofTitle).value).strip()
+        for k in range(startingRowOfEdgeEntries, mySheet.max_row):
+            nodeInfo = str(mySheet.cell(row=k, column=columnNumofNodeNames).value).strip()
+            courseTitle = str(mySheet.cell(row=k, column=columnNumofTitle).value).strip()
             if "." not in nodeInfo:
                 match = re.match(r"([a-z]+)([0-9]+)", nodeInfo, re.I)
                 if match:
@@ -98,9 +98,9 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
             print("new", newNodeTuple)
 
             duplicateReplaced = False
-            for i in range(0, len(nodeList) - 1):
-                if floaterNode == nodeList[i][0]:
-                    nodeList[i] = newNodeTuple
+            for g in range(0, len(nodeList) - 1):
+                if floaterNode == nodeList[g][0]:
+                    nodeList[g] = newNodeTuple
                     duplicateReplaced = True
                     break
             if duplicateReplaced is False:
