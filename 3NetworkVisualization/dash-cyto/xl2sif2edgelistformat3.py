@@ -2,6 +2,7 @@ import openpyxl
 import dash
 import dash_cytoscape as dcyto
 from dash import html as dhtml
+import dash_core_components as dcc
 
 dcyto.load_extra_layouts()
 
@@ -79,9 +80,10 @@ myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 'edgelistOutput
 # print(myNodesLoL)
 # print(myEdgesLoL)
 
-"""Section2: testing dash-cyto app"""
+
 
 myApp = dash.Dash(__name__)
+
 myNodes = [
     {'data': {'id': shortID, 'label': labelID1}, }
     for shortID, labelID1 in myNodesLoL
@@ -91,13 +93,13 @@ myEdges = [
     for sourceID, targetID, labelID2 in myEdgesLoL
 ]
 
-# print("i--oi")
 # print(myNodes)
 # print(myEdges)
 
 myAllElements = myNodes + myEdges
+
 myDefaultStylesheet = [
-    {'selector': 'node', 'style': {'label': 'data(id)'}},
+    {'selector': 'node', 'style': {'label': 'data(id)'} },
     #{'selector': 'edge', 'style': {'label': 'data(label)'}},
     {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
     {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
@@ -126,7 +128,7 @@ myApp.layout = dhtml.Div([
         # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
         # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
         # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
-        layout={'name': 'klay',
+        layout={'name': 'breadthfirst',
                 'roots': '[id = "MATH001"]'}
     )
 ])
