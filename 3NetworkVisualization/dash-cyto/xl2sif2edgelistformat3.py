@@ -110,6 +110,7 @@ myDefaultStylesheet = [
 ]
 
 myApp.layout = dhtml.Div([
+    # dropdown layou menu
     dcc.Dropdown(
         id='dropdown-update-layout', value='dagre', clearable=False,
         options=[
@@ -117,7 +118,8 @@ myApp.layout = dhtml.Div([
         ]
     ),
     dcyto.Cytoscape(
-        id='cytoscape-update-layout',
+        # id='cytoscape'
+        id='cytoscape-update-layout',  # changed to this for dropdown menu
         elements=myAllElements,
         stylesheet=myDefaultStylesheet,
         style={'width': '100%', 'height': '800px'},
@@ -136,11 +138,12 @@ myApp.layout = dhtml.Div([
         # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
         # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
         # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
-        layout={'name': 'breadthfirst',
+        layout={'name': 'dagre',
                 'roots': '[id = "MATH001"]'}
     )
 ])
 
+# does dropdown layout menu stuff
 @myApp.callback(Output('cytoscape-update-layout','layout'),
                 Input('dropdown-update-layout','value'))
 def update_layout(layout):
