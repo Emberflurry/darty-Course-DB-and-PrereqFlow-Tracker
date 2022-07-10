@@ -109,6 +109,14 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
 
     # print(nodeList)
     # print(edgeList)
+        for y in range(0, len(nodeList)-1):
+            if nodeList[y][0][0] == "%":
+                newOrTitle = "OR - 1 of child nodes is required to be fulfilled as prerequisite"
+                nodeList[y] = nodeList[y][0], newOrTitle
+                #nodeList[y][1] = "OR-1 of children required fulfilled as prerequisite"
+            if nodeList[y][0][0] == "&":
+                newAndTitle = "AND - all children are required to be fulfilled as prerequisite"
+                nodeList[y] = nodeList[y][0], newAndTitle
 
     return nodeList, edgeList
 
@@ -196,7 +204,7 @@ myApp.layout = dhtml.Div([
                 Input('cytoscape-event-callbacks-2', 'mouseoverNodeData'))
 def displayTapNodeData(data):
     if data:
-        return "Hovered: " + data['label']  # og was 'label'
+        return "Hovered Node: " + data['label']  # og was 'label'
 
 
 # does dropdown layout menu stuff
