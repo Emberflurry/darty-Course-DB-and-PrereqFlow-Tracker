@@ -2,7 +2,9 @@ import openpyxl
 import dash
 import dash_cytoscape as dcyto
 from dash import html as dhtml
-import dash_core_components as dcc
+# import dash_core_components as dcc
+from dash import dcc
+from dash.dependencies import Input, Output
 
 dcyto.load_extra_layouts()
 
@@ -108,8 +110,14 @@ myDefaultStylesheet = [
 ]
 
 myApp.layout = dhtml.Div([
+    dcc.Dropdown(
+        id='dropdown-update-layout', value='dagre', clearable=False,
+        options=[
+            {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in ['dagre', 'breadthfirst', 'klay', 'euler']
+        ]
+    ),
     dcyto.Cytoscape(
-        id='cytoscape',
+        id='cytoscape-update-layout',
         elements=myAllElements,
         stylesheet=myDefaultStylesheet,
         style={'width': '100%', 'height': '800px'},
@@ -132,6 +140,11 @@ myApp.layout = dhtml.Div([
                 'roots': '[id = "MATH001"]'}
     )
 ])
+
+@myApp.callback(Output('cytoscape-update-layout','layout'),
+                Input('dropdown-update-layout','value'))
+def update_layout(layout):
+    return {'name': layout, 'animate': True}
 
 if __name__ == '__main__':
     myApp.run_server(debug=True)
