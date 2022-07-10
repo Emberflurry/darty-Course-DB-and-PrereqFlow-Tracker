@@ -87,46 +87,24 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                     else:
                         newNumStr = splitNodeInfo[1]
 
-                    floaterNode = splitNodeInfo[0]+newNumStr
+                    floaterNode = splitNodeInfo[0] + newNumStr
                 else:
                     print("regex error in finding match of char/number boundary")
 
             elif "." in nodeInfo:
                 floaterNode = nodeInfo
 
-            # if floaterNode not in nodeList:
-            #     newNodeTuple = floaterNode, courseTitle
-            #     nodeList.append(newNodeTuple)
-
-
             newNodeTuple = floaterNode, courseTitle
             print("new", newNodeTuple)
 
-            # for item in nodeList:
-            #     if item[0] == floaterNode:
-            #         item[0] = newNodeTuple[0]
-            #         item[1] = newNodeTuple[1]
-            #         break
-            duplicateReplaced=False
-            for i in range(0, len(nodeList)-1):
+            duplicateReplaced = False
+            for i in range(0, len(nodeList) - 1):
                 if floaterNode == nodeList[i][0]:
                     nodeList[i] = newNodeTuple
-                    duplicateReplaced=True
+                    duplicateReplaced = True
                     break
-            if duplicateReplaced==False:
+            if duplicateReplaced is False:
                 nodeList.append(newNodeTuple)
-                # if item same as floater, repl w floater, break
-                # else continue
-                #at end of list run for this newNodeTuple, if not broken^^, add to list
-
-            # nodeList.append(newNodeTuple)
-
-
-            # if newNodeTuple not in nodeList:
-            #     nodeList.append()
-
-
-        # note: removing node tuples added by edgelix
 
     # print(nodeList)
     # print(edgeList)
