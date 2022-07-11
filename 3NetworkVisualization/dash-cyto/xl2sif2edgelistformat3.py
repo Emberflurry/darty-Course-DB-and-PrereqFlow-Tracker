@@ -7,7 +7,6 @@ from dash import dcc
 from dash.dependencies import Input, Output
 import re
 import json
-
 dcyto.load_extra_layouts()
 
 
@@ -157,48 +156,90 @@ myDefaultStylesheet = [
                                    'mid-target-arrow-shape': 'vee',
                                    'line-color': 'grey', 'arrow-scale': 3.5, }}
 ]
+
+sidebarStyles = {
+    'tab1': {'height': 'calc(98vh-115px)'},
+    'contentStyle1': {'overflow-y': 'scroll', 'height': 'calc(50%-25px)','border':'thin lightgrey solid'}
+}
+
+#note: global stuff:
+myCyto_id = 'cytoscape-event-callbacks-2'
+
 print("defined app")
 myApp.layout = dhtml.Div([
-    # dropdown layou menu
-    # dcc.Dropdown(
-    #     id='dropdown-update-layout', value='dagre', clearable=False,
-    #     options=[
-    #         {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in
-    #         ['dagre', 'breadthfirst', 'klay', 'euler']
-    #     ]
-    # ),
-    dcyto.Cytoscape(
-        # id='cytoscape'
-        # id='cytoscape-update-layout',  # changed to this for dropdown menu ONLY
-        id='cytoscape-event-callbacks-2',
-        elements=myAllElements,
-        stylesheet=myDefaultStylesheet,
-        style={'width': '100%', 'height': '800px'},
-        # layout choices:
-        # ["random",  bad
-        # "preset",   If you have preset node locations, good.
-        # "circle",   not for this project
-        # "concentric", not for this project
-        # "grid",       not for this project
-        # "breadthfirst",  pretty good
-        # "cose",          too bunched
-        # added extras:------------------
-        # `cose-bilkent` can't use for some reason     https://github.com/cytoscape/cytoscape.js-cose-bilkent
-        # `cola`         nasty                         https://github.com/cytoscape/cytoscape.js-cola
-        # `euler`        crashes                       https://github.com/cytoscape/cytoscape.js-dagre
-        # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
-        # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
-        # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
-        layout={'name': 'dagre',
-                'roots': '[id = "MATH001"]'}
-    ),
-    # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
-    dhtml.Blockquote(id='cytoscape-mouseoverNodeData-output')
 
-    # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO BAD
-    #dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
+    #note: this div for cyto node layout
+    dhtml.Div(className='eight columns', children=[
+        # dropdown layou menu
+        # dcc.Dropdown(
+        #     id='dropdown-update-layout', value='dagre', clearable=False,
+        #     options=[
+        #         {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in
+        #         ['dagre', 'breadthfirst', 'klay', 'euler']
+        #     ]
+        # ),
+        dcyto.Cytoscape(
+            # id='cytoscape'
+            # id='cytoscape-update-layout',  # changed to this for dropdown menu ONLY
+            id=myCyto_id,
+            elements=myAllElements,
+            stylesheet=myDefaultStylesheet,
+            style={'width': '100%', 'height': '800px'},
+            # layout choices:
+            # ["random",  bad
+            # "preset",   If you have preset node locations, good.
+            # "circle",   not for this project
+            # "concentric", not for this project
+            # "grid",       not for this project
+            # "breadthfirst",  pretty good
+            # "cose",          too bunched
+            # added extras:------------------
+            # `cose-bilkent` can't use for some reason     https://github.com/cytoscape/cytoscape.js-cose-bilkent
+            # `cola`         nasty                         https://github.com/cytoscape/cytoscape.js-cola
+            # `euler`        crashes                       https://github.com/cytoscape/cytoscape.js-dagre
+            # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
+            # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
+            # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
+            layout={'name': 'dagre',
+                    'roots': '[id = "MATH001"]'}
+        ),
+        # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
+        dhtml.Blockquote(id='cytoscape-mouseoverNodeData-output')
+
+        # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO BAD
+        # dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
+    ]),
+
+    #note: this div 4 sidebar info
+        dhtml.Div(className='four columns', children=[
+            # dcc.Textarea #TODO try this insted next after testing
+            dcc.Tabs(id='tabs', children=[
+
+                dcc.Tab(label='nodeData1',  # label here is the TITLE of the info tab
+                        children=[
+                    dhtml.Div(style=sidebarStyles['tab1'], children=[
+                        dhtml.P('Node Data output'),  # SUBTITLE just above content
+                        dhtml.Pre(
+                            id='tap-node-data-output1',  # TODO: LINK TO CALLBACK APP FN
+                            style=sidebarStyles['contentStyle1']
+                        )
+                    ])
+                ])
+            ])
+        ]),
+
+    dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder
 ])
 
+@myApp.callback(Output('tap-node-data-output1','children'),
+                [Input(myCyto_id, 'tapNodeData')])
+def displayTapNodeData(data):
+    return json.dumps(data,indent=2) #indent=2 ?
+
+@myApp.callback(Output('tap-node-output1','children'),
+                [Input(myCyto_id, 'tapNode')])
+def displayTapNode(data):
+    return json.dumps(data,indent =2)
 
 @myApp.callback(Output('cytoscape-mouseoverNodeData-output', 'children'),
                 Input('cytoscape-event-callbacks-2', 'mouseoverNodeData'))
