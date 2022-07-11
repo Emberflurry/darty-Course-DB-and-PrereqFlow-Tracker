@@ -2,8 +2,8 @@ import openpyxl
 import dash
 import dash_cytoscape as dcyto
 from dash import html as dhtml
-# import dash_core_components as dcc
-from dash import dcc
+# import dash_core_components as dcc # PHASED OUT DO NOT USE THIS IMPORT SYNTAX
+from dash import dcc  # ^ use this instead
 from dash.dependencies import Input, Output
 import re
 import json
@@ -61,12 +61,12 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                             edgeList.append((mySrc, myTarg, myEdgeLabel))
 
                             if myTarg not in cumNodeSet:
-                                c = (myTarg, "", "")  # TODO CHANGE SECOND ELEM TO SUM USEFUL LATER??
+                                c = (myTarg, "", "")
                                 nodeList.append(c)
                                 cumNodeSet.add(myTarg)
 
                         if mySrc not in cumNodeSet:
-                            b = (mySrc, "", "")  # TODO CHANGE SECOND ELEM TO SUM USEFUL LATER??
+                            b = (mySrc, "", "")
                             nodeList.append(b)
                             cumNodeSet.add(mySrc)
 
@@ -76,6 +76,10 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
             courseTitle = str(mySheet.cell(row=k, column=columnNumofTitle).value).strip()
             courseDescription = str(mySheet.cell(row=k, column=columnNumofDesc).value).strip()
             # TODO: ALSO ADD the OG PREREQ INFO (TEXT) SO THAT USERS CAN INTERPRET COMPLEXITIES
+            # AND OFC the URL(SEE recent ORC scrape xlsx in Webscrapers folder and corresponding script-
+            # ^integrate into final version),
+            # coreqs,profs, etc -all that can be found from orc page...
+            # maybe later also link relevant DEPARTMENT pages but that might be manual
 
             if "." not in nodeInfo:
                 match = re.match(r"([a-z]+)([0-9]+)", nodeInfo, re.I)
@@ -137,7 +141,7 @@ myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
 myApp = dash.Dash(__name__)
 
 myNodes = [
-    {'data': {'id': shortID, 'title': labelID1, 'desc': descText}, }  # note: TESTING
+    {'data': {'id': shortID, 'title': labelID1, 'desc': descText}, }
     for shortID, labelID1, descText in myNodesLoL
 ]
 myEdges = [
@@ -208,7 +212,7 @@ myApp.layout = dhtml.Div([
         # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
         dhtml.Blockquote(id='cytoscape-mouseoverNodeData-output')
 
-        # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO BAD
+        # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO, BAD.
         # dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
     ]),
 
@@ -221,7 +225,7 @@ myApp.layout = dhtml.Div([
                     dhtml.Div(style=sidebarStyles['tab1'], children=[
                         dhtml.P('Node Data:'),  # SUBTITLE just above content
                         dhtml.Pre(
-                            id='tap-node-data-output1',  # TODO: LINK TO CALLBACK APP FN
+                            id='tap-node-data-output1',
                             style=sidebarStyles['contentStyle1']
                         )
                     ])
@@ -232,22 +236,20 @@ myApp.layout = dhtml.Div([
     dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder
 ])
 
+# for node click, pulls node data
 @myApp.callback(Output('tap-node-data-output1','children'),
                 [Input(myCyto_id, 'tapNodeData')])
 def displayTapNodeData(data):
     return str(json.dumps(data, indent=2)).strip("{").strip("}")  # indent=2 ?
 
-#UNNEC, was used for early figuring out 7/10/22
-# @myApp.callback(Output('tap-node-output1','children'),
-#                 [Input(myCyto_id, 'tapNode')])
-# def displayTapNode(data):
-#     return json.dumps(data, indent =2)
 
+# for hover over node, pulls node name/title basic info
 @myApp.callback(Output('cytoscape-mouseoverNodeData-output', 'children'),
                 Input('cytoscape-event-callbacks-2', 'mouseoverNodeData'))
 def displayTapNodeData(data):
     if data:
-        return "Hovered Node: " + data['id']+": "+data['title']  # og was 'label', matches creation of the html/json Node List of Lists called myNodes
+        return "Hovered Node: " + data['id']+": "+data['title']
+        # og was 'label', matches creation of the html/json Node List of Lists called myNodes (7/11/22)
 
 
 # does dropdown layout menu stuff
