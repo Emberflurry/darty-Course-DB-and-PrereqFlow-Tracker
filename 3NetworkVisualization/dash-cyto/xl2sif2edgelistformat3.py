@@ -184,7 +184,7 @@ myApp.layout = dhtml.Div([
             id=myCyto_id,
             elements=myAllElements,
             stylesheet=myDefaultStylesheet,
-            style={'width': '100%', 'height': '800px'},
+            style={'width': '100%', 'height': '500px'},
             # layout choices:
             # ["random",  bad
             # "preset",   If you have preset node locations, good.
@@ -214,11 +214,10 @@ myApp.layout = dhtml.Div([
         dhtml.Div(className='four columns', children=[
             # dcc.Textarea #TODO try this insted next after testing
             dcc.Tabs(id='tabs', children=[
-
-                dcc.Tab(label='nodeData1',  # label here is the TITLE of the info tab
+                dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
                         children=[
                     dhtml.Div(style=sidebarStyles['tab1'], children=[
-                        dhtml.P('Node Data output'),  # SUBTITLE just above content
+                        dhtml.P('Node Data:'),  # SUBTITLE just above content
                         dhtml.Pre(
                             id='tap-node-data-output1',  # TODO: LINK TO CALLBACK APP FN
                             style=sidebarStyles['contentStyle1']
@@ -234,12 +233,13 @@ myApp.layout = dhtml.Div([
 @myApp.callback(Output('tap-node-data-output1','children'),
                 [Input(myCyto_id, 'tapNodeData')])
 def displayTapNodeData(data):
-    return json.dumps(data,indent=2) #indent=2 ?
+    return json.dumps(data, indent=2) #indent=2 ?
 
-@myApp.callback(Output('tap-node-output1','children'),
-                [Input(myCyto_id, 'tapNode')])
-def displayTapNode(data):
-    return json.dumps(data,indent =2)
+#UNNEC, was used for early figuring out 7/10/22
+# @myApp.callback(Output('tap-node-output1','children'),
+#                 [Input(myCyto_id, 'tapNode')])
+# def displayTapNode(data):
+#     return json.dumps(data, indent =2)
 
 @myApp.callback(Output('cytoscape-mouseoverNodeData-output', 'children'),
                 Input('cytoscape-event-callbacks-2', 'mouseoverNodeData'))
