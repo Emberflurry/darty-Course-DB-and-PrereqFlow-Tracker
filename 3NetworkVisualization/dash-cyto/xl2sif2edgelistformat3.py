@@ -11,7 +11,7 @@ dcyto.load_extra_layouts()
 
 
 def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, columnNumofEdgeEntries,
-                         columnNumofNodeNames, columnNumofTitle,
+                         columnNumofNodeNames, columnNumofTitle, columnNumofDesc,
                          outputSIFnameAndOrPath):
     myWB = openpyxl.load_workbook(xlWbFilePath)
     mySheet = myWB[myWB.sheetnames[sheetIndex]]
@@ -61,12 +61,12 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                             edgeList.append((mySrc, myTarg, myEdgeLabel))
 
                             if myTarg not in cumNodeSet:
-                                c = (myTarg, "")  # TODO CHANGE SECOND ELEM TO SUM USEFUL LATER??
+                                c = (myTarg, "", "")  # TODO CHANGE SECOND ELEM TO SUM USEFUL LATER??
                                 nodeList.append(c)
                                 cumNodeSet.add(myTarg)
 
                         if mySrc not in cumNodeSet:
-                            b = (mySrc, "")  # TODO CHANGE SECOND ELEM TO SUM USEFUL LATER??
+                            b = (mySrc, "", "")  # TODO CHANGE SECOND ELEM TO SUM USEFUL LATER??
                             nodeList.append(b)
                             cumNodeSet.add(mySrc)
 
@@ -74,6 +74,9 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
         for k in range(startingRowOfEdgeEntries, mySheet.max_row):
             nodeInfo = str(mySheet.cell(row=k, column=columnNumofNodeNames).value).strip()
             courseTitle = str(mySheet.cell(row=k, column=columnNumofTitle).value).strip()
+            courseDescription = str(mySheet.cell(row=k, column=columnNumofDesc).value).strip()
+            # TODO: ALSO ADD the OG PREREQ INFO (TEXT) SO THAT USERS CAN INTERPRET COMPLEXITIES
+
             if "." not in nodeInfo:
                 match = re.match(r"([a-z]+)([0-9]+)", nodeInfo, re.I)
                 if match:
@@ -94,7 +97,7 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
             elif "." in nodeInfo:
                 floaterNode = nodeInfo
 
-            newNodeTuple = floaterNode, courseTitle
+            newNodeTuple = floaterNode, courseTitle, courseDescription
             print("new", newNodeTuple)
 
             duplicateReplaced = False
@@ -111,32 +114,31 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
         for y in range(0, len(nodeList)-1):
             if nodeList[y][0][0] == "%":
                 newOrTitle = "OR - 1 of child nodes is required to be fulfilled as prerequisite"
-                nodeList[y] = nodeList[y][0], newOrTitle
-                #nodeList[y][1] = "OR-1 of children required fulfilled as prerequisite"
+                nodeList[y] = nodeList[y][0], newOrTitle, "just an OR node"
             if nodeList[y][0][0] == "&":
                 newAndTitle = "AND - all children are required to be fulfilled as prerequisite"
-                nodeList[y] = nodeList[y][0], newAndTitle
+                nodeList[y] = nodeList[y][0], newAndTitle, "just an AND node"
 
     return nodeList, edgeList
 
 
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/2IntermediateProcessing/xlDBcleaning/deleteTestExportCURRENT3.xlsx"
 
-myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2,
+myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
                                               'edgelistOutput3.txt')  # 2nd param: 0 for MATH, 1 for MATH+ENGS
-# TODO: this txt writing step^ is for manual checking of the reading from excel process,
+# note: this txt writing step^ is for manual checking of the reading from excel process,
 #  really can just write straight to list format (as is DONE by the fn)
 
 # print("--")
-print(myNodesLoL)
+# print(myNodesLoL)
 # print(myEdgesLoL)
 # quit()
 
 myApp = dash.Dash(__name__)
 
 myNodes = [
-    {'data': {'id': shortID, 'title': labelID1}, }  # note: TESTING
-    for shortID, labelID1 in myNodesLoL
+    {'data': {'id': shortID, 'title': labelID1, 'desc': descText}, }  # note: TESTING
+    for shortID, labelID1, descText in myNodesLoL
 ]
 myEdges = [
     {'data': {'source': sourceID, 'target': targetID, 'label': labelID2}}
