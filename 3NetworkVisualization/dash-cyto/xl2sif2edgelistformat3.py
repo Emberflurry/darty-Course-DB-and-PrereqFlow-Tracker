@@ -135,7 +135,7 @@ print(myNodesLoL)
 myApp = dash.Dash(__name__)
 
 myNodes = [
-    {'data': {'id': shortID, 'label': labelID1}, }
+    {'data': {'id': shortID, 'title': labelID1}, }  # note: TESTING
     for shortID, labelID1 in myNodesLoL
 ]
 myEdges = [
@@ -233,7 +233,7 @@ myApp.layout = dhtml.Div([
 @myApp.callback(Output('tap-node-data-output1','children'),
                 [Input(myCyto_id, 'tapNodeData')])
 def displayTapNodeData(data):
-    return json.dumps(data, indent=2) #indent=2 ?
+    return str(json.dumps(data, indent=2)).strip("{").strip("}")  # indent=2 ?
 
 #UNNEC, was used for early figuring out 7/10/22
 # @myApp.callback(Output('tap-node-output1','children'),
@@ -245,7 +245,7 @@ def displayTapNodeData(data):
                 Input('cytoscape-event-callbacks-2', 'mouseoverNodeData'))
 def displayTapNodeData(data):
     if data:
-        return "Hovered Node: " + data['label']  # og was 'label'
+        return "Hovered Node: " + data['id']+": "+data['title']  # og was 'label', matches creation of the html/json Node List of Lists called myNodes
 
 
 # does dropdown layout menu stuff
