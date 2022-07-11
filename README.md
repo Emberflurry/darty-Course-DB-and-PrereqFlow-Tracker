@@ -6,6 +6,12 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 
 
 # Node Network testing:
+## (7/11/22) Interactive Viz Comin' along + MATH Clustering Done!
+Yuge progress: nodes can be hovered and clicked on to display info, can use dropdown menu to change auto-layout, added URL capture to webscraper.
+![MATHnodesInteractiveUpdate](https://user-images.githubusercontent.com/87039043/178191409-7616d8ca-dd46-41ff-bbbe-1149e6662d1c.PNG)
+Note: dropdown not shown above for testing purposes, didn't take the time to manually nice-ify the graph, but it's all coming together (finally)
+In progress: Need to link up the rest of the scraper data to the node tuples and node (JSON?) dataframes, and add linkage viz fx to edges when nodes clicked on - both for prereqs in and out.
+
 ## (7/9/22) Prereq Clustering/Nesting - DB Backend work
 in progress, mostly done with MATH department, so far so good. slightly more thinking to do on the prereq entry side but well worth it in terms of visualization efficiency and cleanliness/intuition for the user. Will post sample graphs when done
 ## (7/7/22) Converted! Dash-Cytoscape running, reworking some backend stuff...
