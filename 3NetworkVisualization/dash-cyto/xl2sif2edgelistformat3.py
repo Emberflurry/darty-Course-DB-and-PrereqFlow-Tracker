@@ -244,13 +244,22 @@ myApp.layout = dhtml.Div([
                 ])
             ]),
     dhtml.Button('Clear Selection', id='clear-sel-button',n_clicks_timestamp=0),
-
-    dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder
+    dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder, no idea what this line is
 ])
 
-def resetInverter():
-    global resetNodeSelection
-    return not resetNodeSelection
+def recursivetrace(cRootNode, nodeSet=set()):
+    allEdgeSet = set(myEdges)
+    nodeSet.add(cRootNode)
+    for i in allEdgeSet:
+        if i['data']['target'] == cRootNode['id']:
+            nodeSet.add(i)
+
+    for child in nodeSet:
+        return recursivetrace(child, nodeSet)
+
+
+
+
 
 # for node click, draw per/post reqs
 @myApp.callback(Output(myCyto_id, 'stylesheet'),
@@ -274,7 +283,7 @@ def generate_stylesheet(node, incolor, outcolor):
             'style': {'opacity': 0.2, "curve-style": "bezier",
             }
         }, {"selector": 'node[id = "CLER001"]','style': {'shape': 'rectangle', 'width': 75,'height':40}},
-                      
+
             {#"selector": 'node[id = "{}"]'.format(node['data']['id']),
             "selector": '[title *= a]',  #TODO :DOES THIS WORK or see comment above or ePAIR SUAGE BELOW
             "style": {  #note: NEED TO KEEP THIS CHUNK EVEN IF IT DOESNT DO ANYTHING BC WEIRD ERROR
@@ -396,6 +405,7 @@ def generate_stylesheet(node, incolor, outcolor):
         #         })
 
         return stylesheet
+
 
 # for node click, pulls node data
 @myApp.callback(Output('tap-node-data-output1','children'),
