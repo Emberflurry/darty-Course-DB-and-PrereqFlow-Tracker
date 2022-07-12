@@ -310,60 +310,74 @@ def generate_stylesheet(node, incolor, outcolor):
         }]
 
         #TODO: USE NEW ITERATIVE BACKTRACER, THEN ADD STYLESHEET STUFF FOR EDGES AND NODES PREREQS
+        prereqNodes,prereqEdges = nodeBacktracerFull(node['id'])
+        for eaN in prereqNodes:
+            stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
+                               "style": {'background-color': '#B10DC9',
+                                            "border-color": "purple",
+                                            "border-width": 2,
+                                            "border-opacity": 1,
+                                            "opacity": 1,
 
+                                            "label": "data(label)",
+                                            "color": "#B10DC9",
+                                            "text-opacity": 1,
+                                            "font-size": 12,
+                                            'z-index': 9999}
+                               })
         # (instead of the following: BUT KEEP THE FOLLOWING, maybe for future CHOICES OF PREREQS DISPLAY)
-        for eaNode in myNodes:
-            #print(eaNode)
-            #print(node)
-            if eaNode['data']['id'] == node['id']:
-                stylesheet.append({
-                    "selector": 'node[id = "{}"]'.format(eaNode['data']['id']),
-                    "style": {
-                        'background-color': '#B10DC9',
-                        "border-color": "purple",
-                        "border-width": 2,
-                        "border-opacity": 1,
-                        "opacity": 1,
-
-                        "label": "data(label)",
-                        "color": "#B10DC9",
-                        "text-opacity": 1,
-                        "font-size": 12,
-                        'z-index': 9999
-                    }
-                })
-        for ePair in myEdges:
-            # print("edge / source / target")
-            # print(ePair)
-            # print(ePair['data']['source'])
-            # print(ePair['data']['target'])
-            if ePair['data']['target'] == node['id']:
-                stylesheet.append({
-                    "selector": 'node[id = "{}"]'.format(ePair['data']['source']),  #TODO: MIGHT NOT WORK IDK
-                    "style": {
-                        'background-color': outcolor,
-                        'opacity': 0.9
-                    }
-                })
-                # stylesheet.append({
-                #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO: same concern as above
-                #     "style": {
-                #         "mid-target-arrow-color": outcolor,
-                #         "mid-target-arrow-shape": "vee",
-                #         "line-color": outcolor,
-                #         'opacity': 0.9,
-                #         'z-index': 5000
-                #     }
-                # })
-            if ePair['data']['target'] == node['id']:  #TODO
-                stylesheet.append({
-                    "selector": 'node[id = "{}"]'.format(ePair['data']['source']),
-                    "style": {
-                        'background-color': incolor,
-                        'opacity': 0.9,
-                        'z-index': 9999
-                    }
-                })
+        # for eaNode in myNodes:
+        #     #print(eaNode)
+        #     #print(node)
+        #     if eaNode['data']['id'] == node['id']:
+        #         stylesheet.append({
+        #             "selector": 'node[id = "{}"]'.format(eaNode['data']['id']),
+        #             "style": {
+        #                 'background-color': '#B10DC9',
+        #                 "border-color": "purple",
+        #                 "border-width": 2,
+        #                 "border-opacity": 1,
+        #                 "opacity": 1,
+        #
+        #                 "label": "data(label)",
+        #                 "color": "#B10DC9",
+        #                 "text-opacity": 1,
+        #                 "font-size": 12,
+        #                 'z-index': 9999
+        #             }
+        #         })
+        # for ePair in myEdges:
+        #     # print("edge / source / target")
+        #     # print(ePair)
+        #     # print(ePair['data']['source'])
+        #     # print(ePair['data']['target'])
+        #     if ePair['data']['target'] == node['id']:
+        #         stylesheet.append({
+        #             "selector": 'node[id = "{}"]'.format(ePair['data']['source']),  #TODO: MIGHT NOT WORK IDK
+        #             "style": {
+        #                 'background-color': outcolor,
+        #                 'opacity': 0.9
+        #             }
+        #         })
+        #         # stylesheet.append({
+        #         #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO: same concern as above
+        #         #     "style": {
+        #         #         "mid-target-arrow-color": outcolor,
+        #         #         "mid-target-arrow-shape": "vee",
+        #         #         "line-color": outcolor,
+        #         #         'opacity': 0.9,
+        #         #         'z-index': 5000
+        #         #     }
+        #         # })
+        #     if ePair['data']['target'] == node['id']:  #TODO
+        #         stylesheet.append({
+        #             "selector": 'node[id = "{}"]'.format(ePair['data']['source']),
+        #             "style": {
+        #                 'background-color': incolor,
+        #                 'opacity': 0.9,
+        #                 'z-index': 9999
+        #             }
+        #         })
                 # stylesheet.append({
                 #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO
                 #     "style": {
