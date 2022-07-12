@@ -7,6 +7,7 @@ from dash import dcc  # ^ use this instead
 from dash.dependencies import Input, Output
 import re
 import json
+#suppress_callback_exceptions=True
 dcyto.load_extra_layouts()
 
 
@@ -189,8 +190,8 @@ myApp.layout = dhtml.Div([
             # id='cytoscape-update-layout',  # changed to this for dropdown menu ONLY
             id=myCyto_id,
             elements=myAllElements,
-            stylesheet=myDefaultStylesheet,
-            style={'width': '100%', 'height': '500px'},
+            #stylesheet=myDefaultStylesheet,
+            style={'width': '90%', 'height': '450px'},
             # layout choices:
             # ["random",  bad
             # "preset",   If you have preset node locations, good.
@@ -218,7 +219,7 @@ myApp.layout = dhtml.Div([
 
     #note: this div 4 sidebar info
         dhtml.Div(className='four columns', children=[
-            # dcc.Textarea #TODO try this insted next after testing
+            # dcc.Textarea #TODO try this instead/other html content types next after testing 'Tabs' as below
             dcc.Tabs(id='tabs', children=[
                 dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
                         children=[
@@ -229,12 +230,146 @@ myApp.layout = dhtml.Div([
                             style=sidebarStyles['contentStyle1']
                         )
                     ])
+                ]),
+
+                #note: adding color picker for edges i think
+                dcc.Tab(label='Control Panel1', children=[
+                    #note: CANT FIND dash reusable components so using dcc.Input instead of drc.NamedInput
+                    dcc.Input(name='inColor1',id='inputEdgeColor1',type='text',value='#0074D9'),
+                    dcc.Input(name='outColor1',id='outputEdgeColor1',type='text',value='#FF4136')
                 ])
+
             ])
         ]),
 
     dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder
 ])
+
+# for node click, draw per/post reqs
+@myApp.callback(Output(myCyto_id,'stylesheet'),
+                [Input(myCyto_id,'tapNodeData'),
+                 Input('inputEdgeColor1','value'),
+                 Input('outputEdgeColor1','value')])
+def generate_stylesheet(node,incolor,outcolor):
+    if not node:
+        return myDefaultStylesheet
+    print(node)
+    a = node['title']
+    print(a)
+    stylesheet = [{
+        "selector": 'node',
+        'style': {
+            'opacity': 0.3,
+        }
+    }, {
+        'selector': 'edge',
+        'style': {
+            'opacity': 0.2,
+            "curve-style": "bezier",
+        }
+    }, {
+        #"selector": 'node[id = "{}"]'.format(node['data']['id']),
+        #"selector": node.__getitem__,
+        "selector": '[title *= a]',  #TODO :DOES THIS WORK or see comment above or ePAIR SUAGE BELOW
+        "style": {
+            'background-color': '#B10DC9',
+            "border-color": "purple",
+            "border-width": 2,
+            "border-opacity": 1,
+            "opacity": 1,
+
+            "label": "data(label)",
+            "color": "#B10DC9",
+            "text-opacity": 1,
+            "font-size": 12,
+            'z-index': 9999
+        }
+    }]
+    for ePair in myEdges:
+        print("edge / source / target")
+        print(ePair)
+        print(ePair['data']['source'])
+        print(ePair['data']['target'])
+        if ePair['data']['target'] == node['id']:
+            stylesheet.append({
+                "selector": 'node[id = "{}"]'.format(ePair['data']['source']),  #TODO: MIGHT NOT WORK IDK
+                "style": {
+                    'background-color': outcolor,
+                    'opacity': 0.9
+                }
+            })
+            # stylesheet.append({
+            #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO: same concern as above
+            #     "style": {
+            #         "mid-target-arrow-color": outcolor,
+            #         "mid-target-arrow-shape": "vee",
+            #         "line-color": outcolor,
+            #         'opacity': 0.9,
+            #         'z-index': 5000
+            #     }
+            # })
+        if ePair['data']['target'] == node['id']:  #TODO
+            stylesheet.append({
+                "selector": 'node[id = "{}"]'.format(ePair['data']['source']),
+                "style": {
+                    'background-color': incolor,
+                    'opacity': 0.9,
+                    'z-index': 9999
+                }
+            })
+            # stylesheet.append({
+            #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO
+            #     "style": {
+            #         "mid-target-arrow-color": incolor,
+            #         "mid-target-arrow-shape": "vee",
+            #         "line-color": incolor,
+            #         'opacity': 1,
+            #         'z-index': 5000
+            #     }
+            # })
+            #note: below lines are raw-copied from the demo example, above are my modified.
+
+    # for edge in node['edgesData']:
+    #     if edge['source'] == node['data']['id']:
+    #         stylesheet.append({
+    #             "selector": 'node[id = "{}"]'.format(edge['target']),
+    #             "style": {
+    #                 'background-color': outcolor,
+    #                 'opacity': 0.9
+    #             }
+    #         })
+    #         stylesheet.append({
+    #             "selector": 'edge[id= "{}"]'.format(edge['id']),
+    #             "style": {
+    #                 "mid-target-arrow-color": outcolor,
+    #                 "mid-target-arrow-shape": "vee",
+    #                 "line-color": outcolor,
+    #                 'opacity': 0.9,
+    #                 'z-index': 5000
+    #             }
+    #         })
+    #
+    #     if edge['target'] == node['data']['id']:
+    #         stylesheet.append({
+    #             "selector": 'node[id = "{}"]'.format(edge['source']),
+    #             "style": {
+    #                 'background-color': incolor,
+    #                 'opacity': 0.9,
+    #                 'z-index': 9999
+    #             }
+    #         })
+    #         stylesheet.append({
+    #             "selector": 'edge[id= "{}"]'.format(edge['id']),
+    #             "style": {
+    #                 "mid-target-arrow-color": incolor,
+    #                 "mid-target-arrow-shape": "vee",
+    #                 "line-color": incolor,
+    #                 'opacity': 1,
+    #                 'z-index': 5000
+    #             }
+    #         })
+
+    return stylesheet
 
 # for node click, pulls node data
 @myApp.callback(Output('tap-node-data-output1','children'),
