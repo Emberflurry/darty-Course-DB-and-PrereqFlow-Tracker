@@ -2,13 +2,16 @@ import openpyxl
 import dash
 import dash_cytoscape as dcyto
 from dash import html as dhtml
-# import dash_core_components as dcc # PHASED OUT DO NOT USE THIS IMPORT SYNTAX
 from dash import dcc  # ^ use this instead
 from dash.dependencies import Input, Output, State
 import re
 import json
+from queue import Queue
+
+# import dash_core_components as dcc # PHASED OUT DO NOT USE THIS IMPORT SYNTAX
 #suppress_callback_exceptions=True
 dcyto.load_extra_layouts()
+
 global resetNodeSelection
 resetNodeSelection=False
 
@@ -246,19 +249,6 @@ myApp.layout = dhtml.Div([
     dhtml.Button('Clear Selection', id='clear-sel-button',n_clicks_timestamp=0),
     dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder, no idea what this line is
 ])
-
-def recursivetrace(cRootNode, nodeSet=set()):
-    allEdgeSet = set(myEdges)
-    nodeSet.add(cRootNode)
-    for i in allEdgeSet:
-        if i['data']['target'] == cRootNode['id']:
-            nodeSet.add(i)
-
-    for child in nodeSet:
-        return recursivetrace(child, nodeSet)
-
-
-
 
 
 # for node click, draw per/post reqs

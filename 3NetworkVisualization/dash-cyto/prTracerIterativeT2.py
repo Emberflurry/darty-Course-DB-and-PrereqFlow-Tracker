@@ -173,3 +173,22 @@ while not myQ.empty():
         myQ.put(c)
 
 print(nodeSet)
+
+def nodeBacktracer(rootNodeID):
+    finalNodeSet=[]
+    finalEdgeSet=[]
+    frontierQ=Queue(maxsize=0)
+    frontierQ.put(rootNodeID)
+    while not frontierQ.empty():
+        curNode=frontierQ.get()
+        finalNodeSet.append(curNode)
+        curChildren=[]
+        for eaEdge in myEdges:
+            if eaEdge['data']['target'] == curNode:
+                finalEdgeSet.append(eaEdge['data']['id'])
+                for eaNode in myNodes:
+                    if eaNode['data']['id'] == eaEdge['data']['source'] and eaNode['data']['id'] not in finalNodeSet:
+                        curChildren.append(eaNode['data']['id'])
+        for c in children:
+            frontierQ.put(c)
+    return finalNodeSet,finalEdgeSet
