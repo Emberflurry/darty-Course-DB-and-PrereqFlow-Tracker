@@ -9,11 +9,12 @@ import json
 from queue import Queue
 
 # import dash_core_components as dcc # PHASED OUT DO NOT USE THIS IMPORT SYNTAX
-#suppress_callback_exceptions=True
+# suppress_callback_exceptions=True
 dcyto.load_extra_layouts()
 
 global resetNodeSelection
-resetNodeSelection=False
+resetNodeSelection = False
+
 
 def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, columnNumofEdgeEntries,
                          columnNumofNodeNames, columnNumofTitle, columnNumofDesc,
@@ -118,9 +119,9 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
             if duplicateReplaced is False:
                 nodeList.append(newNodeTuple)
 
-    # print(nodeList)
-    # print(edgeList)
-        for y in range(0, len(nodeList)-1):
+        # print(nodeList)
+        # print(edgeList)
+        for y in range(0, len(nodeList) - 1):
             if nodeList[y][0][0] == "%":
                 newOrTitle = "OR - 1 of child nodes is required to be fulfilled as prerequisite"
                 nodeList[y] = nodeList[y][0], newOrTitle, "just an OR node"
@@ -166,21 +167,21 @@ myDefaultStylesheet = [
     {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
                                    'mid-target-arrow-shape': 'vee',
                                    'line-color': 'grey', 'arrow-scale': 3.5, }},
-    {"selector": 'node[id = "CLER001"]','style': {'shape': 'rectangle', 'width': 75,'height':40}}
+    {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}}
 ]
 
 sidebarStyles = {
     'tab1': {'height': 'calc(98vh-115px)'},
-    'contentStyle1': {'overflow-y': 'scroll', 'height': 'calc(50%-25px)','border':'thin lightgrey solid'}
+    'contentStyle1': {'overflow-y': 'scroll', 'height': 'calc(50%-25px)', 'border': 'thin lightgrey solid'}
 }
 
-#note: global stuff:
+# note: global stuff:
 myCyto_id = 'cytoscape-event-callbacks-2'
 
 print("defined app")
 myApp.layout = dhtml.Div([
 
-    #note: this div for cyto node layout
+    # note: this div for cyto node layout
     dhtml.Div(className='eight columns', children=[
         # dropdown layou menu
         # dcc.Dropdown(
@@ -222,12 +223,12 @@ myApp.layout = dhtml.Div([
         # dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
     ]),
 
-    #note: this div 4 sidebar info
+    # note: this div 4 sidebar info
     dhtml.Div(className='four columns', children=[
-                # dcc.Textarea #TODO try this instead/other html content types next after testing 'Tabs' as below
-                dcc.Tabs(id='tabs', children=[
-                    dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
-                            children=[
+        # dcc.Textarea #TODO try this instead/other html content types next after testing 'Tabs' as below
+        dcc.Tabs(id='tabs', children=[
+            dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
+                    children=[
                         dhtml.Div(style=sidebarStyles['tab1'], children=[
                             dhtml.P('Node Data:'),  # SUBTITLE just above content
                             dhtml.Pre(
@@ -237,28 +238,29 @@ myApp.layout = dhtml.Div([
                         ])
                     ]),
 
-                    #note: adding color picker for edges i think
-                    dcc.Tab(label='Control Panel1', children=[
-                        #note: CANT FIND dash reusable components so using dcc.Input instead of drc.NamedInput
-                        dcc.Input(name='inColor1',id='inputEdgeColor1',type='text',value='#0074D9'),
-                        dcc.Input(name='outColor1',id='outputEdgeColor1',type='text',value='#FF4136')
-                    ])
+            # note: adding color picker for edges i think
+            dcc.Tab(label='Control Panel1', children=[
+                # note: CANT FIND dash reusable components so using dcc.Input instead of drc.NamedInput
+                dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
+                dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136')
+            ])
 
-                ])
-            ]),
-    dhtml.Button('Clear Selection', id='clear-sel-button',n_clicks_timestamp=0),
+        ])
+    ]),
+    dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),
     dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder, no idea what this line is
 ])
 
+
 def nodeBacktracerFull(rootNodeID):
-    finalNodeSet=[]
-    finalEdgeSet=[]
-    frontierQ=Queue(maxsize=0)
+    finalNodeSet = []
+    finalEdgeSet = []
+    frontierQ = Queue(maxsize=0)
     frontierQ.put(rootNodeID)
     while not frontierQ.empty():
-        curNode=frontierQ.get()
+        curNode = frontierQ.get()
         finalNodeSet.append(curNode)
-        curChildren=[]
+        curChildren = []
         for eaEdge in myEdges:
             if eaEdge['data']['target'] == curNode:
                 finalEdgeSet.append(eaEdge)
@@ -267,7 +269,8 @@ def nodeBacktracerFull(rootNodeID):
                         curChildren.append(eaNode['data']['id'])
         for c in curChildren:
             frontierQ.put(c)
-    return finalNodeSet,finalEdgeSet  #note: NodeSet is list of str, EdgeSet is JSON OBJECTS!!
+    return finalNodeSet, finalEdgeSet  # note: NodeSet is list of str, EdgeSet is JSON OBJECTS!!
+
 
 # for node click, draw per/post reqs
 @myApp.callback(Output(myCyto_id, 'stylesheet'),
@@ -284,47 +287,89 @@ def generate_stylesheet(node, incolor, outcolor):
         return myDefaultStylesheet
     else:
         stylesheet = [{"selector": 'node',
-            'style': {'opacity': 0.3,
-            }
-        },
-            {'selector': 'edge',
-            'style': {'opacity': 0.2, "curve-style": "bezier",
-            }
-        }, {"selector": 'node[id = "CLER001"]','style': {'shape': 'rectangle', 'width': 75,'height':40}},
+                       'style': {'opacity': 0.3,
+                                 }
+                       },
+                      {'selector': 'edge',
+                       'style': {'opacity': 0.2, "curve-style": "bezier",
+                                 }
+                       },
+                      {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}},
 
-            {#"selector": 'node[id = "{}"]'.format(node['data']['id']),
-            "selector": '[title *= a]',  #TODO :DOES THIS WORK or see comment above or ePAIR SUAGE BELOW
-            "style": {  #note: NEED TO KEEP THIS CHUNK EVEN IF IT DOESNT DO ANYTHING BC WEIRD ERROR
-                # 'background-color': '#B10DC9',
-                # "border-color": "purple",
-                # "border-width": 2,
-                # "border-opacity": 1,
-                # "opacity": 1,
-                #
-                # "label": "data(label)",
-                # "color": "#B10DC9",
-                # "text-opacity": 1,
-                # "font-size": 12,
-                # 'z-index': 9999
-            }
-        }]
+                      {  # "selector": 'node[id = "{}"]'.format(node['data']['id']),
+                          "selector": '[title *= a]',  # TODO :DOES THIS WORK or see comment above or ePAIR SUAGE BELOW
+                          "style": {  # note: NEED TO KEEP THIS CHUNK EVEN IF IT DOESNT DO ANYTHING BC WEIRD ERROR
+                              # 'background-color': '#B10DC9',
+                              # "border-color": "purple",
+                              # "border-width": 2,
+                              # "border-opacity": 1,
+                              # "opacity": 1,
+                              #
+                              # "label": "data(label)",
+                              # "color": "#B10DC9",
+                              # "text-opacity": 1,
+                              # "font-size": 12,
+                              # 'z-index': 9999
+                          }
+                      }]
 
-        #TODO: USE NEW ITERATIVE BACKTRACER, THEN ADD STYLESHEET STUFF FOR EDGES AND NODES PREREQS
-        prereqNodes,prereqEdges = nodeBacktracerFull(node['id'])
+        # TODO: USE NEW ITERATIVE BACKTRACER, THEN ADD STYLESHEET STUFF FOR EDGES AND NODES PREREQS
+        prereqNodes, prereqEdges = nodeBacktracerFull(node['id'])
         for eaN in prereqNodes:
-            stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
-                               "style": {'background-color': '#B10DC9',
-                                            "border-color": "purple",
-                                            "border-width": 2,
-                                            "border-opacity": 1,
-                                            "opacity": 1,
+            if '%' in eaN:
+                stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
+                                   "style": {'background-color': '#B10DC9',
+                                             "border-color": "blue",
+                                             "border-width": 5.5,
+                                             "border-opacity": 1,
+                                             "opacity": .55,  # note: changed-ORs faded
 
-                                            "label": "data(label)",
-                                            "color": "#B10DC9",
-                                            "text-opacity": 1,
-                                            "font-size": 12,
-                                            'z-index': 9999}
-                               })
+                                             "color": "#B10DC9",
+                                             "text-opacity": .75,  # note: changed-ORs faded
+                                             "font-size": 12,
+                                             'z-index': 9999}
+                                   })
+            elif '&' in eaN:
+                stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
+                                   "style": {'background-color': '#B10DC9',
+                                             "border-color": "red",
+                                             "border-width": 6,
+                                             "border-opacity": .9,
+                                             "opacity": .75,  # note: changed-ANDs faded, less than ORs tho
+
+                                             "color": "#B10DC9",
+                                             "text-opacity": .75,  # note: changed-ANDs faded
+                                             "font-size": 12,
+                                             'z-index': 9999}
+                                   })
+
+            else:
+                stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
+                                   "style": {'background-color': '#B10DC9',
+                                             "border-color": "purple",
+                                             "border-width": 2,
+                                             "border-opacity": 1,
+                                             "opacity": 1,
+
+                                             "color": "#B10DC9",
+                                             "text-opacity": 1,
+                                             "font-size": 12,
+                                             'z-index': 9999}
+                                   })
+        for eaE in prereqEdges:
+            if '%' in eaE['data']['target']:
+                stylesheet.append({"selector": 'edge[id ="{}"]'.format(eaE),
+                                   "style": {'background-color': '#B10DC9',
+                                             "border-color": "purple",
+                                             "border-width": 2,
+                                             "border-opacity": 1,
+                                             "opacity": 1,
+
+                                             "color": "#B10DC9",
+                                             "text-opacity": 1,
+                                             "font-size": 12,
+                                             'z-index': 9999}
+                                   })
         # (instead of the following: BUT KEEP THE FOLLOWING, maybe for future CHOICES OF PREREQS DISPLAY)
         # for eaNode in myNodes:
         #     #print(eaNode)
@@ -378,17 +423,17 @@ def generate_stylesheet(node, incolor, outcolor):
         #                 'z-index': 9999
         #             }
         #         })
-                # stylesheet.append({
-                #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO
-                #     "style": {
-                #         "mid-target-arrow-color": incolor,
-                #         "mid-target-arrow-shape": "vee",
-                #         "line-color": incolor,
-                #         'opacity': 1,
-                #         'z-index': 5000
-                #     }
-                # })
-                #note: below lines are raw-copied from the demo example, above are my modified.
+        # stylesheet.append({
+        #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO
+        #     "style": {
+        #         "mid-target-arrow-color": incolor,
+        #         "mid-target-arrow-shape": "vee",
+        #         "line-color": incolor,
+        #         'opacity': 1,
+        #         'z-index': 5000
+        #     }
+        # })
+        # note: below lines are raw-copied from the demo example, above are my modified.
 
         # for edge in node['edgesData']:
         #     if edge['source'] == node['data']['id']:
@@ -429,12 +474,27 @@ def generate_stylesheet(node, incolor, outcolor):
         #                 'z-index': 5000
         #             }
         #         })
+        stylesheet.append({'selector': 'node', 'style': {'label': 'data(id)'}})
+        stylesheet.append({'selector': 'edge', 'style': {'curve-style': 'bezier'}})
+        stylesheet.append({'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
+                                                         'mid-target-arrow-shape': 'vee',
+                                                         'line-color': 'grey', 'arrow-scale': 3.5, }}, )
+        stylesheet.append(
+            {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}})
+        # note: default stylesheet below, copied and appended to new stylesheet cuz i had to readd for some reason
 
+        # {'selector': 'node', 'style': {'label': 'data(id)'}},
+        # # {'selector': 'edge', 'style': {'label': 'data(label)'}},
+        # {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
+        # {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
+        #                                'mid-target-arrow-shape': 'vee',
+        #                                'line-color': 'grey', 'arrow-scale': 3.5, }},
+        # {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}}
         return stylesheet
 
 
 # for node click, pulls node data
-@myApp.callback(Output('tap-node-data-output1','children'),
+@myApp.callback(Output('tap-node-data-output1', 'children'),
                 [Input(myCyto_id, 'tapNodeData')])
 def displayTapNodeData(data):
     global resetNodeSelection
@@ -452,7 +512,7 @@ def displayTapNodeData(data):
     if data:
         if data['id'] == 'CLER001':
             resetNodeSelection = True
-        return "Hovered Node: " + data['id']+": "+data['title']
+        return "Hovered Node: " + data['id'] + ": " + data['title']
         # og was 'label', matches creation of the html/json Node List of Lists called myNodes (7/11/22)
 
 
