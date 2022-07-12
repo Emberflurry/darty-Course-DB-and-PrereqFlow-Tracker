@@ -185,10 +185,10 @@ def nodeBacktracer(rootNodeID):
         curChildren=[]
         for eaEdge in myEdges:
             if eaEdge['data']['target'] == curNode:
-                finalEdgeSet.append(eaEdge['data']['id'])
+                finalEdgeSet.append(eaEdge)
                 for eaNode in myNodes:
                     if eaNode['data']['id'] == eaEdge['data']['source'] and eaNode['data']['id'] not in finalNodeSet:
                         curChildren.append(eaNode['data']['id'])
-        for c in children:
+        for c in curChildren:
             frontierQ.put(c)
     return finalNodeSet,finalEdgeSet

@@ -250,6 +250,24 @@ myApp.layout = dhtml.Div([
     dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder, no idea what this line is
 ])
 
+def nodeBacktracerFull(rootNodeID):
+    finalNodeSet=[]
+    finalEdgeSet=[]
+    frontierQ=Queue(maxsize=0)
+    frontierQ.put(rootNodeID)
+    while not frontierQ.empty():
+        curNode=frontierQ.get()
+        finalNodeSet.append(curNode)
+        curChildren=[]
+        for eaEdge in myEdges:
+            if eaEdge['data']['target'] == curNode:
+                finalEdgeSet.append(eaEdge)
+                for eaNode in myNodes:
+                    if eaNode['data']['id'] == eaEdge['data']['source'] and eaNode['data']['id'] not in finalNodeSet:
+                        curChildren.append(eaNode['data']['id'])
+        for c in curChildren:
+            frontierQ.put(c)
+    return finalNodeSet,finalEdgeSet  #note: NodeSet is list of str, EdgeSet is JSON OBJECTS!!
 
 # for node click, draw per/post reqs
 @myApp.callback(Output(myCyto_id, 'stylesheet'),
@@ -290,6 +308,10 @@ def generate_stylesheet(node, incolor, outcolor):
                 # 'z-index': 9999
             }
         }]
+
+        #TODO: USE NEW ITERATIVE BACKTRACER, THEN ADD STYLESHEET STUFF FOR EDGES AND NODES PREREQS
+
+        # (instead of the following: BUT KEEP THE FOLLOWING, maybe for future CHOICES OF PREREQS DISPLAY)
         for eaNode in myNodes:
             #print(eaNode)
             #print(node)
