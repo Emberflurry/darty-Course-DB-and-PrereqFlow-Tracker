@@ -8,8 +8,10 @@ undergrad ORC home: http://dartmouth.smartcatalogiq.com/en/current/orc/Departmen
 # Node Network testing:
 ## (7/11/22) Interactive Viz Comin' along + MATH Clustering Done!
 Yuge progress: nodes can be hovered and clicked on to display info, can use dropdown menu to change auto-layout, added URL capture to webscraper.
+How it works at the moment: I run xl2sif2edgelistformat3.py in the 3NetworkVisualization/dash-cyto/ folder, it spits out edgelistOutput3.txt for manual checking, and runs a Dash app locally roughly as per the most recent screenshot below.
 ![MATHnodesInteractiveUpdate](https://user-images.githubusercontent.com/87039043/178191409-7616d8ca-dd46-41ff-bbbe-1149e6662d1c.PNG)
 Note: dropdown not shown above for testing purposes, didn't take the time to manually nice-ify the graph, but it's all coming together (finally). All testing done on my locally hosted (http://127.0.0.1:8050/) dash app.
+
 In progress: Need to link up the rest of the scraper data to the node tuples and node (JSON?) dataframes, and add linkage viz fx to edges when nodes clicked on - both for prereqs in and out.
 
 ## (7/9/22) Prereq Clustering/Nesting - DB Backend work
