@@ -151,7 +151,7 @@ myNodes = [
     for shortID, labelID1, descText in myNodesLoL
 ]
 myEdges = [
-    {'data': {'source': sourceID, 'target': targetID, 'label': labelID2}}
+    {'data': {'id': sourceID + targetID, 'source': sourceID, 'target': targetID, 'label': labelID2}}
     for sourceID, targetID, labelID2 in myEdgesLoL
 ]
 
@@ -161,7 +161,10 @@ myEdges = [
 myAllElements = myNodes + myEdges
 
 myDefaultStylesheet = [
-    {'selector': 'node', 'style': {'label': 'data(id)'}},
+    {'selector': 'node',
+     'style': {'label': 'data(id)', 'shape': 'rectangle', 'width': 100, 'height': 50, 'text-justification': 'center',
+               'text-halign': 'center',
+               'text-valign': 'center'}},
     # {'selector': 'edge', 'style': {'label': 'data(label)'}},
     {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
     {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
@@ -287,7 +290,8 @@ def generate_stylesheet(node, incolor, outcolor):
         return myDefaultStylesheet
     else:
         stylesheet = [{"selector": 'node',
-                       'style': {'opacity': 0.3,
+                       'style': {'opacity': 0.3, 'text-justification': 'center', 'text-halign': 'center',
+                                 'text-valign': 'center'
                                  }
                        },
                       {'selector': 'edge',
@@ -318,58 +322,75 @@ def generate_stylesheet(node, incolor, outcolor):
         for eaN in prereqNodes:
             if '%' in eaN:
                 stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
-                                   "style": {'background-color': '#B10DC9',
+                                   "style": {'background-color': '#2c4c96',
                                              "border-color": "blue",
                                              "border-width": 5.5,
                                              "border-opacity": 1,
                                              "opacity": .55,  # note: changed-ORs faded
 
-                                             "color": "#B10DC9",
+                                             "color": "#fafbfc",
                                              "text-opacity": .75,  # note: changed-ORs faded
-                                             "font-size": 12,
+                                             "font-size": 18,
                                              'z-index': 9999}
                                    })
             elif '&' in eaN:
                 stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
-                                   "style": {'background-color': '#B10DC9',
+                                   "style": {'background-color': '#2c4c96',
                                              "border-color": "red",
                                              "border-width": 6,
                                              "border-opacity": .9,
                                              "opacity": .75,  # note: changed-ANDs faded, less than ORs tho
 
-                                             "color": "#B10DC9",
+                                             "color": "#fafbfc",
                                              "text-opacity": .75,  # note: changed-ANDs faded
-                                             "font-size": 12,
+                                             "font-size": 18,
                                              'z-index': 9999}
                                    })
 
             else:
                 stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
-                                   "style": {'background-color': '#B10DC9',
+                                   "style": {'background-color': '#2c4c96',
                                              "border-color": "purple",
                                              "border-width": 2,
                                              "border-opacity": 1,
                                              "opacity": 1,
 
-                                             "color": "#B10DC9",
+                                             "color": "#fafbfc",
                                              "text-opacity": 1,
-                                             "font-size": 12,
+                                             "font-size": 18,
                                              'z-index': 9999}
                                    })
         for eaE in prereqEdges:
+
+            # TODO: reference EDGE by ID (source+target) and input in format below
+            eaEID = eaE['data']['id']
             if '%' in eaE['data']['target']:
-                stylesheet.append({"selector": 'edge[id ="{}"]'.format(eaE),
-                                   "style": {'background-color': '#B10DC9',
+                stylesheet.append({"selector": 'edge[id ="{}"]'.format(eaEID),
+                                   "style": {'background-color': '#2c4c96',
+                                             "border-color": "blue",
+                                             "border-width": 2,
+                                             "border-opacity": 1,
+                                             "opacity": .75,
+
+                                             "color": "#fafbfc",
+                                             "text-opacity": 1,
+                                             "font-size": 18,
+                                             'z-index': 9999}
+                                   })
+            else:
+                stylesheet.append({"selector": 'edge[id ="{}"]'.format(eaEID),
+                                   "style": {'background-color': '#2c4c96',
                                              "border-color": "purple",
                                              "border-width": 2,
                                              "border-opacity": 1,
                                              "opacity": 1,
 
-                                             "color": "#B10DC9",
+                                             "color": "#fafbfc",
                                              "text-opacity": 1,
-                                             "font-size": 12,
+                                             "font-size": 18,
                                              'z-index': 9999}
                                    })
+
         # (instead of the following: BUT KEEP THE FOLLOWING, maybe for future CHOICES OF PREREQS DISPLAY)
         # for eaNode in myNodes:
         #     #print(eaNode)
@@ -474,13 +495,14 @@ def generate_stylesheet(node, incolor, outcolor):
         #                 'z-index': 5000
         #             }
         #         })
-        stylesheet.append({'selector': 'node', 'style': {'label': 'data(id)'}})
+        stylesheet.append(
+            {'selector': 'node', 'style': {'label': 'data(id)', 'shape': 'rectangle', 'width': 100, 'height': 50}})
         stylesheet.append({'selector': 'edge', 'style': {'curve-style': 'bezier'}})
         stylesheet.append({'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
                                                          'mid-target-arrow-shape': 'vee',
                                                          'line-color': 'grey', 'arrow-scale': 3.5, }}, )
         stylesheet.append(
-            {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}})
+            {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 100, 'height': 60}})
         # note: default stylesheet below, copied and appended to new stylesheet cuz i had to readd for some reason
 
         # {'selector': 'node', 'style': {'label': 'data(id)'}},
