@@ -42,7 +42,9 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                     if str(ea) not in lineDuplicateSet:
                         lineDuplicateSet.add(ea)
 
-                        if "%" in ea:  # NOTE: the id of the OR nodes will be the %### but ill make the labels all OR s
+                        if "%" in ea:
+                            # NOTE: the id of the OR nodes will be the %### but
+                            # note: ^i can make the labels all ORs later in styling
                             glbOrCtr += 1
                             if "%" in ea[4:]:  # if OR->OR, also remap second instance 3: for 2dig, 4: for 3dig?
                                 glbOrCtr += 1
@@ -76,19 +78,21 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                             nodeList.append(b)
                             cumNodeSet.add(mySrc)
 
-        # note: now add FLOATER NODES - ones that have no prereqs/connections
+        # note: now add FLOATER NODES - ones that have no prereqs or connections
         for k in range(startingRowOfEdgeEntries, mySheet.max_row):
             nodeInfo = str(mySheet.cell(row=k, column=columnNumofNodeNames).value).strip()
             courseTitle = str(mySheet.cell(row=k, column=columnNumofTitle).value).strip()
             courseDescription = str(mySheet.cell(row=k, column=columnNumofDesc).value).strip()
-            # TODO: ALSO ADD the OG PREREQ INFO (TEXT) SO THAT USERS CAN INTERPRET COMPLEXITIES
+            # TODO:  M A N Y :
+            # TODO: ALSO ADD the OG PREREQ INFO (RAW TEXT) SO THAT USERS CAN INTERPRET COMPLEXITIES
             # AND OFC the URL(SEE recent ORC scrape xlsx in Webscrapers folder and corresponding script-
             # ^integrate into final version),
             # coreqs,profs, etc -all that can be found from orc page...
             # maybe later also link relevant DEPARTMENT pages but that might be manual
+            # can try to autolink LAYUPLIST pages for ea !!
 
             if "." not in nodeInfo:
-                match = re.match(r"([a-z]+)([0-9]+)", nodeInfo, re.I)
+                match = re.match(r'([a-z]+)([0-9]+)', nodeInfo, re.I)
                 if match:
                     splitNodeInfo = match.groups()
                     # print(splitNodeInfo)
@@ -170,8 +174,11 @@ myDefaultStylesheet = [
     {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
                                    'mid-target-arrow-shape': 'vee',
                                    'line-color': 'grey', 'arrow-scale': 3.5, }},
-    {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}}
+    {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 100, 'height': 60}}
 ]
+orLabel = "OR"
+myDefaultStylesheet.append({'selector': 'node[id *= "%"]',
+                             'style': {'label': orLabel}})
 
 sidebarStyles = {
     'tab1': {'height': 'calc(98vh-115px)'},
@@ -227,6 +234,7 @@ myApp.layout = dhtml.Div([
     ]),
 
     # note: this div 4 sidebar info
+    # TODO: MAKE INTO AN ACTUAL SIDEBAR, NOT THE BOTTOM TAB DISPLAY
     dhtml.Div(className='four columns', children=[
         # dcc.Textarea #TODO try this instead/other html content types next after testing 'Tabs' as below
         dcc.Tabs(id='tabs', children=[
@@ -243,19 +251,27 @@ myApp.layout = dhtml.Div([
 
             # note: adding color picker for edges i think
             dcc.Tab(label='Control Panel1', children=[
-                # note: CANT FIND dash reusable components so using dcc.Input instead of drc.NamedInput
+                # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
                 dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
-                dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136')
+                dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
             ])
 
         ])
     ]),
     dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),
-    dhtml.Div(id='placeholder')  # TODO: WTF IS placeholder, no idea what this line is
+    #dhtml.Div(id='placeholder')  # note: WTF IS placeholder, no idea what this line is
 ])
 
 
-def nodeBacktracerFull(rootNodeID):
+def nodeBFSTracer(rootNodeID,direction):
+    if direction == "bck":
+        edgeEnd = 'target'
+        newPtr = 'source'
+    elif direction == "fwd":
+        edgeEnd = 'source'
+        newPtr = 'target'
+    else:
+        return "invalid direction input"
     finalNodeSet = []
     finalEdgeSet = []
     frontierQ = Queue(maxsize=0)
@@ -265,14 +281,14 @@ def nodeBacktracerFull(rootNodeID):
         finalNodeSet.append(curNode)
         curChildren = []
         for eaEdge in myEdges:
-            if eaEdge['data']['target'] == curNode:
+            if eaEdge['data'][edgeEnd] == curNode:
                 finalEdgeSet.append(eaEdge)
                 for eaNode in myNodes:
-                    if eaNode['data']['id'] == eaEdge['data']['source'] and eaNode['data']['id'] not in finalNodeSet:
+                    if eaNode['data']['id'] == eaEdge['data'][newPtr] and eaNode['data']['id'] not in finalNodeSet:
                         curChildren.append(eaNode['data']['id'])
         for c in curChildren:
             frontierQ.put(c)
-    return finalNodeSet, finalEdgeSet  # note: NodeSet is list of str, EdgeSet is JSON OBJECTS!!
+    return finalNodeSet, finalEdgeSet  # note: NodeSet is list of node IDs as str, EdgeSet is JSON OBJECTS!!
 
 
 # for node click, draw per/post reqs
@@ -282,10 +298,10 @@ def nodeBacktracerFull(rootNodeID):
                  Input('outputEdgeColor1', 'value')])
 def generate_stylesheet(node, incolor, outcolor):
     global resetNodeSelection
-    print(resetNodeSelection)
+    # print(resetNodeSelection)
     if not node:
         return myDefaultStylesheet
-    if resetNodeSelection == True:
+    if resetNodeSelection:
         resetNodeSelection = False
         return myDefaultStylesheet
     else:
@@ -300,25 +316,31 @@ def generate_stylesheet(node, incolor, outcolor):
                        },
                       {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}},
 
-                      {  # "selector": 'node[id = "{}"]'.format(node['data']['id']),
-                          "selector": '[title *= a]',  # TODO :DOES THIS WORK or see comment above or ePAIR SUAGE BELOW
-                          "style": {  # note: NEED TO KEEP THIS CHUNK EVEN IF IT DOESNT DO ANYTHING BC WEIRD ERROR
-                              # 'background-color': '#B10DC9',
-                              # "border-color": "purple",
-                              # "border-width": 2,
-                              # "border-opacity": 1,
-                              # "opacity": 1,
-                              #
-                              # "label": "data(label)",
-                              # "color": "#B10DC9",
-                              # "text-opacity": 1,
-                              # "font-size": 12,
-                              # 'z-index': 9999
-                          }
-                      }]
+                      # {  # "selector": 'node[id = "{}"]'.format(node['data']['id']),
+                      #     "selector": '[title *= a]',
+                      #     "style": {  # note: FIXED - (don't) NEED TO KEEP THIS CHUNK EVEN IF IT DOESNT DO ANYTHING BC WEIRD ERROR
+                      #         # 'background-color': '#B10DC9',
+                      #         # "border-color": "purple",
+                      #         # "border-width": 2,
+                      #         # "border-opacity": 1,
+                      #         # "opacity": 1,
+                      #         #
+                      #         # "label": "data(label)",
+                      #         # "color": "#B10DC9",
+                      #         # "text-opacity": 1,
+                      #         # "font-size": 12,
+                      #         # 'z-index': 9999
+                      #     }
+                      # }
+                      ]
 
-        # TODO: USE NEW ITERATIVE BACKTRACER, THEN ADD STYLESHEET STUFF FOR EDGES AND NODES PREREQS
-        prereqNodes, prereqEdges = nodeBacktracerFull(node['id'])
+        prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "fwd")  # fwd or bck
+
+        #note: 3lines below JUST FOR TESTING, will separate in dif IF statements for interactive viz options
+        bprNodes, bprEdges = nodeBFSTracer(node['id'], "bck")
+        prereqNodes += bprNodes
+        prereqEdges += bprEdges
+
         for eaN in prereqNodes:
             if '%' in eaN:
                 stylesheet.append({"selector": 'node[id ="{}"]'.format(eaN),
@@ -361,8 +383,6 @@ def generate_stylesheet(node, incolor, outcolor):
                                              'z-index': 9999}
                                    })
         for eaE in prereqEdges:
-
-            # TODO: reference EDGE by ID (source+target) and input in format below
             eaEID = eaE['data']['id']
             if '%' in eaE['data']['target']:
                 stylesheet.append({"selector": 'edge[id ="{}"]'.format(eaEID),
@@ -391,127 +411,18 @@ def generate_stylesheet(node, incolor, outcolor):
                                              'z-index': 9999}
                                    })
 
-        # (instead of the following: BUT KEEP THE FOLLOWING, maybe for future CHOICES OF PREREQS DISPLAY)
-        # for eaNode in myNodes:
-        #     #print(eaNode)
-        #     #print(node)
-        #     if eaNode['data']['id'] == node['id']:
-        #         stylesheet.append({
-        #             "selector": 'node[id = "{}"]'.format(eaNode['data']['id']),
-        #             "style": {
-        #                 'background-color': '#B10DC9',
-        #                 "border-color": "purple",
-        #                 "border-width": 2,
-        #                 "border-opacity": 1,
-        #                 "opacity": 1,
-        #
-        #                 "label": "data(label)",
-        #                 "color": "#B10DC9",
-        #                 "text-opacity": 1,
-        #                 "font-size": 12,
-        #                 'z-index': 9999
-        #             }
-        #         })
-        # for ePair in myEdges:
-        #     # print("edge / source / target")
-        #     # print(ePair)
-        #     # print(ePair['data']['source'])
-        #     # print(ePair['data']['target'])
-        #     if ePair['data']['target'] == node['id']:
-        #         stylesheet.append({
-        #             "selector": 'node[id = "{}"]'.format(ePair['data']['source']),  #TODO: MIGHT NOT WORK IDK
-        #             "style": {
-        #                 'background-color': outcolor,
-        #                 'opacity': 0.9
-        #             }
-        #         })
-        #         # stylesheet.append({
-        #         #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO: same concern as above
-        #         #     "style": {
-        #         #         "mid-target-arrow-color": outcolor,
-        #         #         "mid-target-arrow-shape": "vee",
-        #         #         "line-color": outcolor,
-        #         #         'opacity': 0.9,
-        #         #         'z-index': 5000
-        #         #     }
-        #         # })
-        #     if ePair['data']['target'] == node['id']:  #TODO
-        #         stylesheet.append({
-        #             "selector": 'node[id = "{}"]'.format(ePair['data']['source']),
-        #             "style": {
-        #                 'background-color': incolor,
-        #                 'opacity': 0.9,
-        #                 'z-index': 9999
-        #             }
-        #         })
-        # stylesheet.append({
-        #     "selector": 'edge[id= "{}"]'.format(ePair['id']),  #TODO
-        #     "style": {
-        #         "mid-target-arrow-color": incolor,
-        #         "mid-target-arrow-shape": "vee",
-        #         "line-color": incolor,
-        #         'opacity': 1,
-        #         'z-index': 5000
-        #     }
-        # })
-        # note: below lines are raw-copied from the demo example, above are my modified.
-
-        # for edge in node['edgesData']:
-        #     if edge['source'] == node['data']['id']:
-        #         stylesheet.append({
-        #             "selector": 'node[id = "{}"]'.format(edge['target']),
-        #             "style": {
-        #                 'background-color': outcolor,
-        #                 'opacity': 0.9
-        #             }
-        #         })
-        #         stylesheet.append({
-        #             "selector": 'edge[id= "{}"]'.format(edge['id']),
-        #             "style": {
-        #                 "mid-target-arrow-color": outcolor,
-        #                 "mid-target-arrow-shape": "vee",
-        #                 "line-color": outcolor,
-        #                 'opacity': 0.9,
-        #                 'z-index': 5000
-        #             }
-        #         })
-        #
-        #     if edge['target'] == node['data']['id']:
-        #         stylesheet.append({
-        #             "selector": 'node[id = "{}"]'.format(edge['source']),
-        #             "style": {
-        #                 'background-color': incolor,
-        #                 'opacity': 0.9,
-        #                 'z-index': 9999
-        #             }
-        #         })
-        #         stylesheet.append({
-        #             "selector": 'edge[id= "{}"]'.format(edge['id']),
-        #             "style": {
-        #                 "mid-target-arrow-color": incolor,
-        #                 "mid-target-arrow-shape": "vee",
-        #                 "line-color": incolor,
-        #                 'opacity': 1,
-        #                 'z-index': 5000
-        #             }
-        #         })
         stylesheet.append(
-            {'selector': 'node', 'style': {'label': 'data(id)', 'shape': 'rectangle', 'width': 100, 'height': 50}})
+            {'selector': 'node', 'style': {'label': 'data(id)', 'shape': 'rectangle', 'width': 100, 'height': 60}})
         stylesheet.append({'selector': 'edge', 'style': {'curve-style': 'bezier'}})
         stylesheet.append({'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
                                                          'mid-target-arrow-shape': 'vee',
                                                          'line-color': 'grey', 'arrow-scale': 3.5, }}, )
         stylesheet.append(
             {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 100, 'height': 60}})
+        stylesheet.append({'selector': 'node[id *= "%"]',
+                           'style': {'label': orLabel}})
         # note: default stylesheet below, copied and appended to new stylesheet cuz i had to readd for some reason
 
-        # {'selector': 'node', 'style': {'label': 'data(id)'}},
-        # # {'selector': 'edge', 'style': {'label': 'data(label)'}},
-        # {'selector': 'edge', 'style': {'curve-style': 'bezier'}},
-        # {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
-        #                                'mid-target-arrow-shape': 'vee',
-        #                                'line-color': 'grey', 'arrow-scale': 3.5, }},
-        # {"selector": 'node[id = "CLER001"]', 'style': {'shape': 'rectangle', 'width': 75, 'height': 40}}
         return stylesheet
 
 
@@ -519,10 +430,6 @@ def generate_stylesheet(node, incolor, outcolor):
 @myApp.callback(Output('tap-node-data-output1', 'children'),
                 [Input(myCyto_id, 'tapNodeData')])
 def displayTapNodeData(data):
-    global resetNodeSelection
-    # if data:
-    #     if data['id'] == 'CLER001':
-    #         resetNodeSelection = True
     return str(json.dumps(data, indent=2)).strip("{").strip("}")  # indent=2 ?
 
 
@@ -535,7 +442,7 @@ def displayTapNodeData(data):
         if data['id'] == 'CLER001':
             resetNodeSelection = True
         return "Hovered Node: " + data['id'] + ": " + data['title']
-        # og was 'label', matches creation of the html/json Node List of Lists called myNodes (7/11/22)
+
 
 
 # does dropdown layout menu stuff
