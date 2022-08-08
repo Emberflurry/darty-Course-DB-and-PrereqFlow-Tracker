@@ -254,7 +254,7 @@ myApp.layout = dhtml.Div([
             # note: adding color picker for edges i think
             dcc.Tab(label='Control Panel', children=[
                 # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
-                dcc.Dropdown(['prerequisites', 'postrequisites', 'both'], 'prerequisites', id='reqDropdown1'),
+                dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
                 dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
                 dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
             ])
@@ -265,17 +265,6 @@ myApp.layout = dhtml.Div([
     # dhtml.Div(id='placeholder')  # note: WTF IS placeholder, no idea what this line is
 ])
 
-# @myApp.callback(Input('reqDropdown1', 'value'))
-# def updateReqDisplayType(value):
-#     global requisiteDisplaySetting
-#     if value == 'prerequisites':
-#         requisiteDisplaySetting = 'pre'
-#     elif value == 'postrequisites':
-#         requisiteDisplaySetting = 'post'
-#     elif value == 'both':
-#         requisiteDisplaySetting = 'both'
-#     else:
-#         return "value error with requisite dropdown input/output"
 
 def nodeBFSTracer(rootNodeID, direction):
     if direction == "bck":
@@ -361,6 +350,8 @@ def generate_stylesheet(node, incolor, outcolor,requisiteDisplayChoice):
             prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "fwd")  # FORWARD REQS
         elif requisiteDisplayChoice == 'prerequisites':
             prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "bck")  # BACKWARD REQS
+        elif requisiteDisplayChoice == 'neither (why would you do this?)':
+            prereqNodes, prereqEdges = [], []  # empty, for testing
         else:
             return "ERROR WITH variable requisiteDisplayChoice - not one of both, prerequisites, postrequisites"
 
