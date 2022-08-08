@@ -192,7 +192,8 @@ myCyto_id = 'cytoscape-event-callbacks-2'
 
 print("defined app")
 myApp.layout = dhtml.Div([
-
+    dhtml.H1(children='Dartmouth Course-Flow Vizualizer', style={'color': '#096A3F'}),
+    dhtml.Div(children="course data from ORC as of 7/22, developed and maintained by John DeForest and visualized through a Plotly-Dash-Cytoscape config"),
     # note: this div for cyto node layout
     dhtml.Div(className='eight columns', children=[
         # dropdown layout menu
@@ -261,7 +262,7 @@ myApp.layout = dhtml.Div([
 
         ])
     ]),
-    dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),  #FIXME DOESNT WORK - maybe just remove lol
+    # dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),  #FIXME DOESNT WORK - maybe just remove lol
     # dhtml.Div(id='placeholder')  # note: WTF IS placeholder, no idea what this line is
 ])
 
@@ -300,7 +301,7 @@ def nodeBFSTracer(rootNodeID, direction):
                  # Input('inputEdgeColor1', 'value'),
                  # Input('outputEdgeColor1', 'value'),
                  Input('reqDropdown1', 'value')])
-def generate_stylesheet(node,requisiteDisplayChoice):
+def generate_stylesheet(node, requisiteDisplayChoice):
     global resetNodeSelection
     # print(resetNodeSelection)
     if not node:
@@ -352,6 +353,19 @@ def generate_stylesheet(node,requisiteDisplayChoice):
             prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "bck")  # BACKWARD REQS
         elif requisiteDisplayChoice == 'neither (why would you do this?)':
             prereqNodes, prereqEdges = [node], []  # empty, for testing
+            curNodeID = node['id']
+            stylesheet.append({"selector": 'node[id ="{}"]'.format(curNodeID),
+                               "style": {'background-color': '#2c4c96',
+                                         "border-color": "purple",
+                                         "border-width": 2,
+                                         "border-opacity": 1,
+                                         "opacity": 1,
+
+                                         "color": "#fafbfc",
+                                         "text-opacity": 1,
+                                         "font-size": 18,
+                                         'z-index': 9999}
+                               })
         else:
             return "ERROR WITH variable requisiteDisplayChoice - not one of both, prerequisites, postrequisites"
 
@@ -444,8 +458,8 @@ def generate_stylesheet(node,requisiteDisplayChoice):
 @myApp.callback(Output('tap-node-data-output1', 'children'),
                 [Input(myCyto_id, 'tapNodeData')])
 def displayTapNodeData(data):
-    if data == 'null':
-        return "select a node to display ORC information"
+    if data == None:
+        return "select a node to display ORC information here"
     return str(json.dumps(data, indent=2)).strip("{").strip("}")  # indent=2 ?
 
 
