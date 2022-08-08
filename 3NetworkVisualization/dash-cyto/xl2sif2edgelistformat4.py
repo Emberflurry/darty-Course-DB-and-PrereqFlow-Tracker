@@ -255,8 +255,8 @@ myApp.layout = dhtml.Div([
             dcc.Tab(label='Control Panel', children=[
                 # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
                 dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
-                dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
-                dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
+                #dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
+                #dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
             ])
 
         ])
@@ -297,10 +297,10 @@ def nodeBFSTracer(rootNodeID, direction):
 # for node click, draw per/post reqs
 @myApp.callback(Output(myCyto_id, 'stylesheet'),
                 [Input(myCyto_id, 'tapNodeData'),
-                 Input('inputEdgeColor1', 'value'),
-                 Input('outputEdgeColor1', 'value'),
+                 # Input('inputEdgeColor1', 'value'),
+                 # Input('outputEdgeColor1', 'value'),
                  Input('reqDropdown1', 'value')])
-def generate_stylesheet(node, incolor, outcolor,requisiteDisplayChoice):
+def generate_stylesheet(node,requisiteDisplayChoice):
     global resetNodeSelection
     # print(resetNodeSelection)
     if not node:
@@ -351,7 +351,7 @@ def generate_stylesheet(node, incolor, outcolor,requisiteDisplayChoice):
         elif requisiteDisplayChoice == 'prerequisites':
             prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "bck")  # BACKWARD REQS
         elif requisiteDisplayChoice == 'neither (why would you do this?)':
-            prereqNodes, prereqEdges = [], []  # empty, for testing
+            prereqNodes, prereqEdges = [node], []  # empty, for testing
         else:
             return "ERROR WITH variable requisiteDisplayChoice - not one of both, prerequisites, postrequisites"
 
@@ -444,6 +444,8 @@ def generate_stylesheet(node, incolor, outcolor,requisiteDisplayChoice):
 @myApp.callback(Output('tap-node-data-output1', 'children'),
                 [Input(myCyto_id, 'tapNodeData')])
 def displayTapNodeData(data):
+    if data == 'null':
+        return "select a node to display ORC information"
     return str(json.dumps(data, indent=2)).strip("{").strip("}")  # indent=2 ?
 
 
