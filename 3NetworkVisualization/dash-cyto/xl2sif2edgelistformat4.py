@@ -252,20 +252,32 @@ myApp.layout = dhtml.Div([
                     ]),
 
             # note: adding color picker for edges i think
-            dcc.Tab(label='Control Panel1', children=[
+            dcc.Tab(label='Control Panel', children=[
                 # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
+                dcc.Dropdown(['prerequisites', 'postrequisites', 'both'], 'prerequisites', id='reqDropdown1'),
                 dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
                 dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
             ])
 
         ])
     ]),
-    dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),
-    #dhtml.Div(id='placeholder')  # note: WTF IS placeholder, no idea what this line is
+    dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),  #FIXME DOESNT WORK - maybe just remove lol
+    # dhtml.Div(id='placeholder')  # note: WTF IS placeholder, no idea what this line is
 ])
 
+# @myApp.callback(Input('reqDropdown1', 'value'))
+# def updateReqDisplayType(value):
+#     global requisiteDisplaySetting
+#     if value == 'prerequisites':
+#         requisiteDisplaySetting = 'pre'
+#     elif value == 'postrequisites':
+#         requisiteDisplaySetting = 'post'
+#     elif value == 'both':
+#         requisiteDisplaySetting = 'both'
+#     else:
+#         return "value error with requisite dropdown input/output"
 
-def nodeBFSTracer(rootNodeID,direction):
+def nodeBFSTracer(rootNodeID, direction):
     if direction == "bck":
         edgeEnd = 'target'
         newPtr = 'source'
@@ -297,8 +309,9 @@ def nodeBFSTracer(rootNodeID,direction):
 @myApp.callback(Output(myCyto_id, 'stylesheet'),
                 [Input(myCyto_id, 'tapNodeData'),
                  Input('inputEdgeColor1', 'value'),
-                 Input('outputEdgeColor1', 'value')])
-def generate_stylesheet(node, incolor, outcolor):
+                 Input('outputEdgeColor1', 'value'),
+                 Input('reqDropdown1', 'value')])
+def generate_stylesheet(node, incolor, outcolor,requisiteDisplayChoice):
     global resetNodeSelection
     # print(resetNodeSelection)
     if not node:
@@ -335,13 +348,21 @@ def generate_stylesheet(node, incolor, outcolor):
                       #     }
                       # }
                       ]
+        if requisiteDisplayChoice == 'both':
 
-        prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "fwd")  # FORWARD REQS
+            prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "fwd")  # FORWARD REQS
 
-        #note: 3lines below JUST FOR TESTING, will separate in dif IF statements for interactive viz options
-        bprNodes, bprEdges = nodeBFSTracer(node['id'], "bck")   # BACKWARD REQS
-        prereqNodes += bprNodes
-        prereqEdges += bprEdges
+            #note: 3lines below JUST FOR TESTING, will separate in dif IF statements for interactive viz options
+            bprNodes, bprEdges = nodeBFSTracer(node['id'], "bck")   # BACKWARD REQS
+            prereqNodes += bprNodes
+            prereqEdges += bprEdges
+
+        elif requisiteDisplayChoice == 'postrequisites':
+            prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "fwd")  # FORWARD REQS
+        elif requisiteDisplayChoice == 'prerequisites':
+            prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "bck")  # BACKWARD REQS
+        else:
+            return "ERROR WITH variable requisiteDisplayChoice - not one of both, prerequisites, postrequisites"
 
         for eaN in prereqNodes:
             if '%' in eaN:
