@@ -15,6 +15,8 @@ dcyto.load_extra_layouts()
 global resetNodeSelection
 resetNodeSelection = False
 
+global requisiteDisplaySetting  # pre, post, both
+requisiteDisplaySetting = "pre"
 
 def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, columnNumofEdgeEntries,
                          columnNumofNodeNames, columnNumofTitle, columnNumofDesc,
@@ -141,10 +143,10 @@ cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/2IntermediatePr
 myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
                                               'edgelistOutput3.txt')  # 2nd param: 0 for MATH, 1 for MATH+ENGS
 # note: this txt writing step^ is for manual checking of the reading from excel process,
-#  really can just write straight to list format (as is DONE by the fn)
+#  really can just write straight to list format (AS IS DONE by the fn)
 
 # print("--")
-# print(myNodesLoL)
+# print(myNodesLoL)  # this is a List of Lists, there is nothing funny about this. :|
 # print(myEdgesLoL)
 # quit()
 
@@ -193,7 +195,7 @@ myApp.layout = dhtml.Div([
 
     # note: this div for cyto node layout
     dhtml.Div(className='eight columns', children=[
-        # dropdown layou menu
+        # dropdown layout menu
         # dcc.Dropdown(
         #     id='dropdown-update-layout', value='dagre', clearable=False,
         #     options=[
