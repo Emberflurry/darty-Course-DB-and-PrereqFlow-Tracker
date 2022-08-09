@@ -150,7 +150,7 @@ myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
 # print(myEdgesLoL)
 # quit()
 
-myApp = dash.Dash(__name__)
+myApp = dash.Dash(__name__, title='Darty Course-Flow Viz')
 
 myNodes = [
     {'data': {'id': shortID, 'title': labelID1, 'desc': descText}, }
