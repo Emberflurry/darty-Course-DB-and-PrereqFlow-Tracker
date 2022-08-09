@@ -7,6 +7,7 @@ from dash.dependencies import Input, Output, State
 import re
 import json
 from queue import Queue
+import dash_bootstrap_components as dbc
 
 # import dash_core_components as dcc # PHASED OUT DO NOT USE THIS IMPORT SYNTAX
 # suppress_callback_exceptions=True
@@ -114,7 +115,7 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                 floaterNode = nodeInfo
 
             newNodeTuple = floaterNode, courseTitle, courseDescription
-            print("new", newNodeTuple)
+            # print("new", newNodeTuple)
 
             duplicateReplaced = False
             for g in range(0, len(nodeList) - 1):
@@ -191,53 +192,53 @@ sidebarStyles = {
 myCyto_id = 'cytoscape-event-callbacks-2'
 
 print("defined app")
-myApp.layout = dhtml.Div([
+headerSection = [
     dhtml.H1(children='Dartmouth Course-Flow Vizualizer', style={'color': '#096A3F'}),
-    dhtml.Div(children="course data from ORC as of 7/22, developed and maintained by John DeForest and visualized through a Plotly-Dash-Cytoscape config"),
-    # note: this div for cyto node layout
+    dhtml.Div(children="course data from ORC as of 7/22, developed and maintained by John DeForest and visualized through a Plotly-Dash-Cytoscape config")
+    ]
+graphSection = [
     dhtml.Div(className='eight columns', children=[
-        # dropdown layout menu
-        # dcc.Dropdown(
-        #     id='dropdown-update-layout', value='dagre', clearable=False,
-        #     options=[
-        #         {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in
-        #         ['dagre', 'breadthfirst', 'klay', 'euler']
-        #     ]
-        # ),
-        dcyto.Cytoscape(
-            # id='cytoscape'
-            # id='cytoscape-update-layout',  # changed to this for dropdown menu ONLY
-            id=myCyto_id,
-            elements=myAllElements,
-            stylesheet=myDefaultStylesheet,
-            style={'width': '90%', 'height': '450px'},
-            # layout choices:
-            # ["random",  bad
-            # "preset",   If you have preset node locations, good.
-            # "circle",   not for this project
-            # "concentric", not for this project
-            # "grid",       not for this project
-            # "breadthfirst",  pretty good
-            # "cose",          too bunched
-            # added extras:------------------
-            # `cose-bilkent` can't use for some reason     https://github.com/cytoscape/cytoscape.js-cose-bilkent
-            # `cola`         nasty                         https://github.com/cytoscape/cytoscape.js-cola
-            # `euler`        crashes                       https://github.com/cytoscape/cytoscape.js-dagre
-            # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
-            # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
-            # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
-            layout={'name': 'dagre',
-                    'roots': '[id = "MATH001"]'}
-        ),
-        # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
-        dhtml.Blockquote(id='cytoscape-mouseoverNodeData-output')
+            # dropdown layout menu
+            # dcc.Dropdown(
+            #     id='dropdown-update-layout', value='dagre', clearable=False,
+            #     options=[
+            #         {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in
+            #         ['dagre', 'breadthfirst', 'klay', 'euler']
+            #     ]
+            # ),
+            dcyto.Cytoscape(
+                # id='cytoscape'
+                # id='cytoscape-update-layout',  # changed to this for dropdown menu ONLY
+                id=myCyto_id,
+                elements=myAllElements,
+                stylesheet=myDefaultStylesheet,
+                style={'width': '90%', 'height': '450px'},
+                # layout choices:
+                # ["random",  bad
+                # "preset",   If you have preset node locations, good.
+                # "circle",   not for this project
+                # "concentric", not for this project
+                # "grid",       not for this project
+                # "breadthfirst",  pretty good
+                # "cose",          too bunched
+                # added extras:------------------
+                # `cose-bilkent` can't use for some reason     https://github.com/cytoscape/cytoscape.js-cose-bilkent
+                # `cola`         nasty                         https://github.com/cytoscape/cytoscape.js-cola
+                # `euler`        crashes                       https://github.com/cytoscape/cytoscape.js-dagre
+                # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
+                # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
+                # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
+                layout={'name': 'dagre',
+                        'roots': '[id = "MATH001"]'}
+            ),
+            # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
+            dhtml.Blockquote(id='cytoscape-mouseoverNodeData-output')
 
-        # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO, BAD.
-        # dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
-    ]),
-
-    # note: this div 4 sidebar info
-    # TODO: MAKE INTO AN ACTUAL SIDEBAR, NOT THE BOTTOM TAB DISPLAY
+            # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO, BAD.
+            # dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
+        ])
+]
+sidebarSection = [
     dhtml.Div(className='four columns', children=[
         # dcc.Textarea #TODO try this instead/other html content types next after testing 'Tabs' as below
         dcc.Tabs(id='tabs', children=[
@@ -261,10 +262,92 @@ myApp.layout = dhtml.Div([
             ])
 
         ])
-    ]),
-    # dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),  #FIXME DOESNT WORK - maybe just remove lol
-    # dhtml.Div(id='placeholder')  # note: WTF IS placeholder, no idea what this line is
-])
+    ])]
+
+myApp.layout = dhtml.Div(
+    [
+        headerSection,
+        dcc.Tabs(children=[graphSection,
+        sidebarSection])
+    ]
+)
+
+
+
+# myApp.layout = dhtml.Div([
+#     dhtml.H1(children='Dartmouth Course-Flow Vizualizer', style={'color': '#096A3F'}),
+#     dhtml.Div(children="course data from ORC as of 7/22, developed and maintained by John DeForest and visualized through a Plotly-Dash-Cytoscape config"),
+#     # note: this div for cyto node layout
+#     dhtml.Div(className='eight columns', children=[
+#         # dropdown layout menu
+#         # dcc.Dropdown(
+#         #     id='dropdown-update-layout', value='dagre', clearable=False,
+#         #     options=[
+#         #         {'label': myLayoutSelName, 'value': myLayoutSelName} for myLayoutSelName in
+#         #         ['dagre', 'breadthfirst', 'klay', 'euler']
+#         #     ]
+#         # ),
+#         dcyto.Cytoscape(
+#             # id='cytoscape'
+#             # id='cytoscape-update-layout',  # changed to this for dropdown menu ONLY
+#             id=myCyto_id,
+#             elements=myAllElements,
+#             stylesheet=myDefaultStylesheet,
+#             style={'width': '90%', 'height': '450px'},
+#             # layout choices:
+#             # ["random",  bad
+#             # "preset",   If you have preset node locations, good.
+#             # "circle",   not for this project
+#             # "concentric", not for this project
+#             # "grid",       not for this project
+#             # "breadthfirst",  pretty good
+#             # "cose",          too bunched
+#             # added extras:------------------
+#             # `cose-bilkent` can't use for some reason     https://github.com/cytoscape/cytoscape.js-cose-bilkent
+#             # `cola`         nasty                         https://github.com/cytoscape/cytoscape.js-cola
+#             # `euler`        crashes                       https://github.com/cytoscape/cytoscape.js-dagre
+#             # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
+#             # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
+#             # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
+#             layout={'name': 'dagre',
+#                     'roots': '[id = "MATH001"]'}
+#         ),
+#         # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
+#         dhtml.Blockquote(id='cytoscape-mouseoverNodeData-output')
+#
+#         # dhtml.Caption(id='cytoscape-mouseoverNodeData-output') NO, BAD.
+#         # dhtml.Title(id='cytoscape-mouseoverNodeData-output') NO DOESNT WORK
+#     ]),
+#
+#     # note: this div 4 sidebar info
+#     # TODO: MAKE INTO AN ACTUAL SIDEBAR, NOT THE BOTTOM TAB DISPLAY
+#     dhtml.Div(className='four columns', children=[
+#         # dcc.Textarea #TODO try this instead/other html content types next after testing 'Tabs' as below
+#         dcc.Tabs(id='tabs', children=[
+#             dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
+#                     children=[
+#                         dhtml.Div(style=sidebarStyles['tab1'], children=[
+#                             dhtml.P('Node Data:'),  # SUBTITLE just above content
+#                             dhtml.Pre(
+#                                 id='tap-node-data-output1',
+#                                 style=sidebarStyles['contentStyle1']
+#                             )
+#                         ])
+#                     ]),
+#
+#             # note: adding color picker for edges i think
+#             dcc.Tab(label='Control Panel', children=[
+#                 # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
+#                 dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
+#                 #dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
+#                 #dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
+#             ])
+#
+#         ])
+#     ]),
+#     # dhtml.Button('Clear Selection', id='clear-sel-button', n_clicks_timestamp=0),  #FIXME DOESNT WORK - maybe just remove lol
+#     # dhtml.Div(id='placeholder')  # note: WTF IS placeholder, no idea what this line is
+# ])
 
 
 def nodeBFSTracer(rootNodeID, direction):
