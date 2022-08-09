@@ -267,8 +267,10 @@ sidebarSection = [
 myApp.layout = dhtml.Div(
     [
         headerSection,
-        dcc.Tabs(children=[graphSection,
-        sidebarSection])
+        dcc.Tabs(children=[
+                graphSection,
+                sidebarSection
+        ])
     ]
 )
 
