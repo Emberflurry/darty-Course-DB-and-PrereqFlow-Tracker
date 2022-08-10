@@ -21,16 +21,17 @@ resetNodeSelection = False
 
 def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, columnNumofEdgeEntries,
                          columnNumofNodeNames, columnNumofTitle, columnNumofDesc,
-                         outputSIFnameAndOrPath):
+                         outputSIFnameAndOrPath, PosSheetIndex):
     myWB = openpyxl.load_workbook(xlWbFilePath)
     mySheet = myWB[myWB.sheetnames[sheetIndex]]
+    positionSheet = myWB[myWB.sheetnames[PosSheetIndex]]
     with open(outputSIFnameAndOrPath, 'w') as myOutFile:
         glbOrCtr = 0  # can handle note: INCREASED TO 0-999 (THREE DIGITS CAPACITY FOR ALL GLOBAL ORS/ANDS)
         glbAndCtr = 0  # ^           # note: Only use now if counting # of ors and ands for debugging...
 
         # FOR outputs to node/edge lists for Dash-Cyto graph visuals, see lines 102-119
         edgeList = []
-        nodeList = []
+        nodeList = list()
 
         cumNodeSet = set()  # note: for keeping track of NODES to add/already been added
         lineDuplicateSet = set()  # note: makes sure repeated/duplicate EDGES are not added
@@ -72,12 +73,12 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                             edgeList.append((mySrc, myTarg, myEdgeLabel))
 
                             if myTarg not in cumNodeSet:
-                                c = (myTarg, "", "")
+                                c = [myTarg, "", ""]
                                 nodeList.append(c)
                                 cumNodeSet.add(myTarg)
 
                         if mySrc not in cumNodeSet:
-                            b = (mySrc, "", "")
+                            b = [mySrc, "", ""]
                             nodeList.append(b)
                             cumNodeSet.add(mySrc)
 
@@ -108,23 +109,24 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                         newNumStr = splitNodeInfo[1]
 
                     floaterNode = splitNodeInfo[0] + newNumStr
-                else:
-                    print("regex error in finding match of char/number boundary")
+                elif not match:
+                    print("regex error1 in finding match of char/number boundary w "+str(nodeInfo))
 
             elif "." in nodeInfo:
                 floaterNode = nodeInfo
 
-            newNodeTuple = floaterNode, courseTitle, courseDescription
-            # print("new", newNodeTuple)
+            initXpos, initYpos = 50, 50
+            newNodeTupleList = [floaterNode, courseTitle, courseDescription, initXpos, initYpos]
+            # print("new", newNodeTupleList)
 
             duplicateReplaced = False
             for g in range(0, len(nodeList) - 1):
                 if floaterNode == nodeList[g][0]:
-                    nodeList[g] = newNodeTuple
+                    nodeList[g] = newNodeTupleList
                     duplicateReplaced = True
                     break
             if duplicateReplaced is False:
-                nodeList.append(newNodeTuple)
+                nodeList.append(newNodeTupleList)
 
         # print(nodeList)
         # print(edgeList)
@@ -136,13 +138,38 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                 newAndTitle = "AND - all children are required to be fulfilled as prerequisite"
                 nodeList[y] = nodeList[y][0], newAndTitle, "just an AND node"
 
+        nodeSet4posChk = set()
+        for i in range(2, positionSheet.max_row+1):
+            nodeID = str(positionSheet.cell(row=i, column=1).value)
+            print(nodeID)
+            Xpos = str(positionSheet.cell(row=i, column=2).value).strip()
+            Ypos = str(positionSheet.cell(row=i, column=3).value).strip()
+
+            if nodeID not in nodeSet4posChk:
+                nodeSet4posChk.add(nodeID)
+            else:
+                print("duplicate nodeLoc at row "+str(i)+": "+nodeID)
+
+            #assuming no duplicates:
+            for q in range(0, len(nodeList)-1):
+                if nodeID == nodeList[q][0]:
+                    nodeList[q][3] = Xpos
+                    nodeList[q][4] = Ypos
+                    # asList = list(nodeList[q])
+                    # asList[3] = Xpos
+                    # asList[4] = Ypos
+                    # nodeList[q] = tuple(asList)
+        print(len(nodeSet4posChk))
+
+
+    print(nodeList[1])
     return nodeList, edgeList
 
 
 cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/2IntermediateProcessing/xlDBcleaning/deleteTestExportCURRENT3.xlsx"
 
 myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
-                                              'edgelistOutput3.txt')  # 2nd param: 0 for MATH, 1 for MATH+ENGS
+                                              'edgelistOutput3.txt', 1)  # 2nd param: 0 for MATH, 1 for MATH+ENGS
 # note: this txt writing step^ is for manual checking of the reading from excel process,
 #  really can just write straight to list format (AS IS DONE by the fn)
 
