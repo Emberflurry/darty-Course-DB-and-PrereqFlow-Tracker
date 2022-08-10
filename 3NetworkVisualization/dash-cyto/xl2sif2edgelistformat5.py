@@ -73,12 +73,24 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                             edgeList.append((mySrc, myTarg, myEdgeLabel))
 
                             if myTarg not in cumNodeSet:
-                                c = [myTarg, "", ""]
+                                c=list()
+                                c.append(myTarg)
+                                c.append("")
+                                c.append("")
+                                c.append("")
+                                c.append("")
+                                #c = [myTarg, "", ""]
                                 nodeList.append(c)
                                 cumNodeSet.add(myTarg)
 
                         if mySrc not in cumNodeSet:
-                            b = [mySrc, "", ""]
+                            b=list()
+                            b.append(mySrc)
+                            b.append("")
+                            b.append("")
+                            b.append("")
+                            b.append("")
+                            #b = [mySrc, "", ""]
                             nodeList.append(b)
                             cumNodeSet.add(mySrc)
 
@@ -116,7 +128,14 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
                 floaterNode = nodeInfo
 
             initXpos, initYpos = 50, 50
-            newNodeTupleList = [floaterNode, courseTitle, courseDescription, initXpos, initYpos]
+            #newNodeTupleList = [floaterNode, courseTitle, courseDescription, initXpos, initYpos]
+            newNodeTupleList = list()
+            newNodeTupleList.append(floaterNode)
+            newNodeTupleList.append(courseTitle)
+            newNodeTupleList.append(courseDescription)
+            newNodeTupleList.append(initXpos)
+            newNodeTupleList.append(initYpos)
+
             # print("new", newNodeTupleList)
 
             duplicateReplaced = False
@@ -133,36 +152,39 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
         for y in range(0, len(nodeList) - 1):
             if nodeList[y][0][0] == "%":
                 newOrTitle = "OR - 1 of child nodes is required to be fulfilled as prerequisite"
-                nodeList[y] = nodeList[y][0], newOrTitle, "just an OR node"
+                nodeList[y] = [str(nodeList[y][0]), str(newOrTitle + "just an OR node"), "", "", ""]
             if nodeList[y][0][0] == "&":
                 newAndTitle = "AND - all children are required to be fulfilled as prerequisite"
-                nodeList[y] = nodeList[y][0], newAndTitle, "just an AND node"
+                nodeList[y] = [str(nodeList[y][0]), str(newAndTitle + "just an AND node"), "", "", ""]
 
-        nodeSet4posChk = set()
+
         for i in range(2, positionSheet.max_row+1):
             nodeID = str(positionSheet.cell(row=i, column=1).value)
-            print(nodeID)
+            #print(nodeID)
             Xpos = str(positionSheet.cell(row=i, column=2).value).strip()
             Ypos = str(positionSheet.cell(row=i, column=3).value).strip()
 
-            if nodeID not in nodeSet4posChk:
-                nodeSet4posChk.add(nodeID)
-            else:
-                print("duplicate nodeLoc at row "+str(i)+": "+nodeID)
-
             #assuming no duplicates:
+            bool = False
             for q in range(0, len(nodeList)-1):
-                if nodeID == nodeList[q][0]:
+                if str(nodeID) == str(nodeList[q][0]):
+                    print(str(nodeID)+" // "+str(nodeList[q][0]))
+                    #print(nodeList[q])
+                    #print(nodeList[q][3])
                     nodeList[q][3] = Xpos
                     nodeList[q][4] = Ypos
-                    # asList = list(nodeList[q])
-                    # asList[3] = Xpos
-                    # asList[4] = Ypos
-                    # nodeList[q] = tuple(asList)
-        print(len(nodeSet4posChk))
+                    bool = True
 
-
-    print(nodeList[1])
+            if bool is False:
+                print("node"+str(nodeID)+"didntLineUpWAnyCurrentNodes-no match for locationData pairing")
+    # print(nodeList[3])
+    # print(nodeList[53])
+    # print(nodeList[13])
+    # print(nodeList[23])
+    # print(nodeList[78])
+    # for itemm in nodeList:
+    #     if str(itemm[4]) == '':
+    #         print(str(itemm[0])+"missingCoords")
     return nodeList, edgeList
 
 
@@ -181,8 +203,9 @@ myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
 myApp = dash.Dash(__name__, title='Darty Course-Flow Viz',external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 myNodes = [
-    {'data': {'id': shortID, 'title': labelID1, 'desc': descText}, }
-    for shortID, labelID1, descText in myNodesLoL
+    {'data': {'id': shortID, 'title': labelID1, 'desc': descText},
+     'position': {'x': int(Xpos1), 'y': int(Ypos1)}}
+    for shortID, labelID1, descText, Xpos1, Ypos1 in myNodesLoL
 ]
 myEdges = [
     {'data': {'id': sourceID + targetID, 'source': sourceID, 'target': targetID, 'label': labelID2}}
@@ -255,7 +278,7 @@ graphSection = [
                 # `spread`       BAD                           https://github.com/cytoscape/cytoscape.js-spread
                 # `dagre`        pretty good                   https://github.com/cytoscape/cytoscape.js-dagre
                 # `klay`         decent                        https://github.com/cytoscape/cytoscape.js-klay
-                layout={'name': 'dagre',
+                layout={'name': 'preset',
                         'roots': '[id = "MATH001"]'}
             ),
             # dhtml.P(id='cytoscape-mouseoverNodeData-output'),
@@ -312,6 +335,7 @@ ctrlPanelCard = dbc.Card(dbc.CardBody(
         [
             dhtml.P("This is tab 2!", className="card-text"),
             dbc.Button("Don't click here", color="danger"),
+
         ]
     ),
     className="mt-3",
@@ -340,7 +364,13 @@ myApp.layout = dhtml.Div([
         dbc.Col(dbc.Container(dbc.Col(children=graphSection)), width=9),
         dbc.Col(dbc.Container([
         dbc.Row(id="testID1", children=[dbc.Col(nodeDataCard)],),
-        dbc.Row(dbc.Col(ctrlPanelCard))
+        dbc.Row(dbc.Col(ctrlPanelCard)),
+        dcc.Tab(label='Control Panel', children=[
+                # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
+                dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
+                #dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
+                #dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
+            ])
     ], fluid=True), width=3)
     ]),
 
