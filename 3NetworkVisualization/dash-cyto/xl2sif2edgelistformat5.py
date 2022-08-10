@@ -151,7 +151,7 @@ myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
 # print(myEdgesLoL)
 # quit()
 
-myApp = dash.Dash(__name__, title='Darty Course-Flow Viz')
+myApp = dash.Dash(__name__, title='Darty Course-Flow Viz',external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 myNodes = [
     {'data': {'id': shortID, 'title': labelID1, 'desc': descText}, }
@@ -212,7 +212,7 @@ graphSection = [
                 id=myCyto_id,
                 elements=myAllElements,
                 stylesheet=myDefaultStylesheet,
-                style={'width': '90%', 'height': '450px'},
+                style={'width': '100%', 'height': '750px'},
                 # layout choices:
                 # ["random",  bad
                 # "preset",   If you have preset node locations, good.
@@ -266,21 +266,58 @@ sidebarSection = [
 
 nodeDataCard = dbc.Card(
     dbc.CardBody([
+            dcc.Tabs(id='tabs', children=[
+                        dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
+                                children=[
+                                    dhtml.Div(style=sidebarStyles['tab1'], children=[
+                                        dhtml.P('Node Data:'),  # SUBTITLE just above content
+                                        dhtml.Pre(
+                                            id='tap-node-data-output1',
+                                            style=sidebarStyles['contentStyle1']
+                                        )
+                                    ])
+                                ])]),
             dhtml.P("This is tab 1!", className="card-text"),
             dbc.Button("Click here", color="success"),
         ]),
     className="mt-3",)
-ctrlPanelCard = dbc.Card()
-myApp.layout = dhtml.Div(
-    [
-        #headerSection,
-        dbc.Row([
-            dbc.Col(dhtml.Div(children=graphSection), width=8),  # True "auto" 1-12  for expand, snugFit, gridWidthInteger resp.
-            dbc.Col(dhtml.Div(children=sidebarSection), width=4)
-        ]),
-        dbc.Row([])
-    ]
+ctrlPanelCard = dbc.Card(dbc.CardBody(
+        [
+            dhtml.P("This is tab 2!", className="card-text"),
+            dbc.Button("Don't click here", color="danger"),
+        ]
+    ),
+    className="mt-3",
 )
+# myApp.layout = dhtml.Div(
+#     [
+#         #headerSection,
+#         # dbc.Row([
+#         #     dbc.Col(dhtml.Div(children=graphSection), width=8),  # True "auto" 1-12  for expand, snugFit, gridWidthInteger resp.
+#         #     dbc.Col(dhtml.Div(children=sidebarSection), width=4)
+#         # ]),
+#         dbc.Tabs([
+#             dbc.Tab(nodeDataCard, label="Node Data"),
+#             dbc.Tab(ctrlPanelCard, label="Display Controls")
+#         ])
+#     ]
+# )
+# myApp.layout = dbc.Tabs([
+#             dbc.Tab(nodeDataCard, label="Node Data"),
+#             dbc.Tab(ctrlPanelCard, label="Display Controls"),
+#             dbc.Container(graphSection),
+#             dbc.Container(sidebarSection),
+#         ])
+myApp.layout = dhtml.Div([
+    dbc.Row([
+        dbc.Col(dbc.Container(dbc.Col(children=graphSection)), width=9),
+        dbc.Col(dbc.Container([
+        dbc.Row(id="testID1", children=[dbc.Col(nodeDataCard)],),
+        dbc.Row(dbc.Col(ctrlPanelCard))
+    ], fluid=True), width=3)
+    ]),
+
+])
 
 
 
