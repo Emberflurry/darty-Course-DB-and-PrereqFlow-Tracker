@@ -264,13 +264,21 @@ sidebarSection = [
         ])
     ])]
 
+nodeDataCard = dbc.Card(
+    dbc.CardBody([
+            dhtml.P("This is tab 1!", className="card-text"),
+            dbc.Button("Click here", color="success"),
+        ]),
+    className="mt-3",)
+ctrlPanelCard = dbc.Card()
 myApp.layout = dhtml.Div(
     [
-        headerSection,
-        dcc.Tabs(children=[
-                graphSection,
-                sidebarSection
-        ])
+        #headerSection,
+        dbc.Row([
+            dbc.Col(dhtml.Div(children=graphSection), width=8),  # True "auto" 1-12  for expand, snugFit, gridWidthInteger resp.
+            dbc.Col(dhtml.Div(children=sidebarSection), width=4)
+        ]),
+        dbc.Row([])
     ]
 )
 
