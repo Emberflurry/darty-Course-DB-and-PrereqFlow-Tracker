@@ -334,12 +334,12 @@ sidebarSection = [
 #     className="mt-3",)
 nodeDataCard = dbc.Card(
     dbc.CardBody([dhtml.Div(style=sidebarStyles['tab1'], children=[
-                                        dhtml.P('Node Data:'),  # SUBTITLE just above content
-                                        dhtml.Div(
-                                            id='tap-node-data-output1',
-                                            style=sidebarStyles['contentStyle1']
-                                                    )
-                                    ])
+                        dhtml.P('Node Data:'),  # SUBTITLE just above content
+                        dhtml.P(
+                                id='tap-node-data-output1',
+                                style=sidebarStyles['contentStyle1']
+                                )
+                            ])
             # dcc.Tabs(id='tabs', children=[
             #             dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
             #                     children=[
