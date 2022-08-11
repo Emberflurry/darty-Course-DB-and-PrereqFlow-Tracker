@@ -3,26 +3,27 @@
 # Also the way I implemented it ended up being depth first search lol
 # Doesn't matter though cause checking all connecting nodes anyway
 
-def bfs(startNode, edges, forward=True, nodes_visited=set(), edges_visited=list()):
-	nodes_visited.add(startNode)
-	# All the nodes you can get to is this node plus all the nodes your children can get to.
+def bfs(startNode, nodes, edges, forward=True, nodes_visited=dict(), edges_visited=list()):
+	nodes_visited[startNode["name"]] = startNode
+	
+	# All the nodes you can get to are this node plus all the nodes your children can get to.
 	for edge in edges:
-		if forward and edge["startNode"] == startNode:
+		if forward and edge["startNode"] == startNode["name"]:
 			
 			if not edge in edges_visited:
 				edges_visited.append(edge)
 
-			if not edge["endNode"] in nodes_visited:
-				nodes_visited, edges_visited = bfs(edge["endNode"], edges,
+			if not edge["endNode"] in [key for key in nodes_visited.keys()]:
+				nodes_visited, edges_visited = bfs(nodes[edge["endNode"]], nodes, edges,
 					forward=forward, nodes_visited=nodes_visited, edges_visited=edges_visited)
 			
 
-		if not forward and edge["endNode"] == startNode:
+		if not forward and edge["endNode"] == startNode["name"]:
 			if not edge in edges_visited:
 				edges_visited.append(edge)
 
-			if not edge["startNode"] in nodes_visited:
-				nodes_visited, edges_visited = bfs(edge["startNode"], edges,
+			if not edge["startNode"] in [key for key in nodes_visited.keys()]:
+				nodes_visited, edges_visited = bfs(nodes[edge["startNode"]], nodes, edges,
 					forward=forward, nodes_visited=nodes_visited, edges_visited=edges_visited)
 
 	return nodes_visited, edges_visited

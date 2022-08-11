@@ -4,9 +4,11 @@ from bfs import bfs
 
 import dash
 from dash import html, dcc
-from dash.dependencies import Input, Output, State
+from dash import Input, Output, State
 import dash_cytoscape as dcyto
 import json
+
+from webfunctions import aggregate_elements
 
 
 dcyto.load_extra_layouts()
@@ -16,19 +18,10 @@ file = "../../2IntermediateProcessing/xlDBcleaning/deleteTestExportCURRENT3.xlsx
 
 nodes, edges = get_graph_data(file, "MATHglobalsRedo")
 
-
+# print(bfs(list(nodes.values())[0], nodes, edges))
 
 app = dash.Dash(__name__, title='Darty Course-Flow Vizualizer')
 
-
-allElements = []
-
-for key in nodes.keys():
-    allElements.append({'data':{'id': key, "label":key, 'title':nodes[key]["title"], 'disc':nodes[key]["disc"]}},)
-
-for edge in edges:
-    allElements.append({"data":{"id":edge["startNode"]+edge["endNode"], 
-        "source":edge["startNode"], "target":edge["endNode"], "label":edge["label"]}})
 
 app.layout = html.Div([
     # HEADER
@@ -37,22 +30,57 @@ app.layout = html.Div([
     html.H4(children="""course data from ORC as of 7/22, developed and maintained 
         by John DeForest and visualized through a Plotly-Dash-Cytoscape config"""),
     
-
-    # Display graph
     html.Div(className='eight columns', children=[
         dcyto.Cytoscape(
-            id="Cytoscape",
-            elements=allElements,
+            id="cytoscape",
+            elements=aggregate_elements(nodes, edges),
+            
+            stylesheet=[
+                {
+                'selector': 'node',
+                'style': {
+                    'label': 'data(id)'
+                }
+            },
+            {'selector': 'edge', 'style': {'mid-target-arrow-color': 'blue',
+                                   'mid-target-arrow-shape': 'vee',
+                                   'line-color': 'grey', 'arrow-scale': 3.5, }},
+            ],
+
             style={'width': '90%', 'height': '450px'},
             layout={'name': 'dagre',
                     'roots': '[id = "MATH001"]'}
         ),
-        html.Blockquote(id='cytoscape-mouseoverNodeData-output')
     ]),
+
+    # html.selection
+    dcc.Dropdown(["Whole"] + [key for key in nodes.keys()], list(nodes.keys())[0], id='class_dropdown'),
+
+    dcc.RadioItems(['Prereqs', 'Postreqs'], 'Prereqs', id="prereq_selector")
+    
 ])
+
+
+@app.callback(
+    Output(component_id="cytoscape", component_property="elements"),
+    Input(component_id="class_dropdown", component_property="value"),
+    Input(component_id="prereq_selector", component_property="value"),
+    )
+def create_graph(class_, prereq):
+    if class_ == "Whole":
+        return aggregate_elements(nodes, edges)
+    else:
+        prereq_nodes = dict()
+        prereq_edges = list()
+        if prereq == "Prereqs":
+            prereq_nodes, prereq_edges = bfs(nodes[class_], nodes, edges, forward=False, nodes_visited=prereq_nodes, edges_visited=prereq_edges)
+        else:
+            prereq_nodes, prereq_edges = bfs(nodes[class_], nodes, edges, forward=True, nodes_visited=prereq_nodes, edges_visited=prereq_edges)
+        return aggregate_elements(prereq_nodes, prereq_edges)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
 
 """
 

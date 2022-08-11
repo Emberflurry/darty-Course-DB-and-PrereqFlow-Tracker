@@ -34,7 +34,7 @@ def get_graph_data(file, sheet):
                     dep, number = segmented.groups()
                     nodeName = dep + number.zfill(3)
 
-            nodes[nodeName] = {"title":nodeTitle, "disc":nodeDescription}
+            nodes[nodeName] = {"name":nodeName, "title":nodeTitle, "desc":nodeDescription}
 
 
         # Get edge info
@@ -51,10 +51,10 @@ def get_graph_data(file, sheet):
                 endNode = new_edge[2]
                 
                 if not startNode in nodes.keys():
-                    nodes[startNode] = {"title":None, "disc":None}
+                    nodes[startNode] = {"name":startNode, "title":None, "desc":None}
 
                 if not endNode in nodes.keys():
-                    nodes[endNode] = {"title":None, "disc":None}
+                    nodes[endNode] = {"name":endNode, "title":None, "desc":None}
 
                 # add edge
                 edge = {"startNode":startNode, "endNode":endNode, "label":label}
