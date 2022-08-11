@@ -235,7 +235,7 @@ myDefaultStylesheet.append({'selector': 'node[id *= "%"]',
 
 sidebarStyles = {
     'tab1': {'height': 'calc(98vh-115px)'},
-    'contentStyle1': {'overflow-y': 'scroll', 'height': 'calc(50%-25px)', 'border': 'thin lightgrey solid'}
+    'contentStyle1': {'overflow-y': 'scroll', 'overflow-x': 'hidden', 'height': 'calc(50%-25px)', 'border': 'thin lightgrey solid'}
 }
 
 # note: global stuff:
@@ -296,7 +296,7 @@ sidebarSection = [
                     children=[
                         dhtml.Div(style=sidebarStyles['tab1'], children=[
                             dhtml.P('Node Data:'),  # SUBTITLE just above content
-                            dhtml.Pre(
+                            dhtml.Caption(
                                 id='tap-node-data-output1',
                                 style=sidebarStyles['contentStyle1']
                             )
@@ -314,21 +314,40 @@ sidebarSection = [
         ])
     ])]
 
+# nodeDataCard = dbc.Card(
+#     dbc.CardBody([
+#             dcc.Tabs(id='tabs', children=[
+#                         dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
+#                                 children=[
+#                                     dhtml.Div(style=sidebarStyles['tab1'], children=[
+#                                         dhtml.P('Node Data:'),  # SUBTITLE just above content
+#                                         dhtml.Pre(
+#                                             id='tap-node-data-output1',
+#                                             style=sidebarStyles['contentStyle1']
+#                                                     )
+#                                     ])
+#                                 ])
+#             ]),
+#             # dhtml.P("This is tab 1!", className="card-text"),
+#             # dbc.Button("Click here", color="success"),
+#         ]),
+#     className="mt-3",)
 nodeDataCard = dbc.Card(
-    dbc.CardBody([
-            dcc.Tabs(id='tabs', children=[
-                        dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
-                                children=[
-                                    dhtml.Div(style=sidebarStyles['tab1'], children=[
+    dbc.CardBody([dhtml.Div(style=sidebarStyles['tab1'], children=[
                                         dhtml.P('Node Data:'),  # SUBTITLE just above content
-                                        dhtml.Pre(
+                                        dhtml.Div(
                                             id='tap-node-data-output1',
                                             style=sidebarStyles['contentStyle1']
-                                        )
+                                                    )
                                     ])
-                                ])]),
-            dhtml.P("This is tab 1!", className="card-text"),
-            dbc.Button("Click here", color="success"),
+            # dcc.Tabs(id='tabs', children=[
+            #             dcc.Tab(label='Click on a node for full ORC content',  # label here is the TITLE of the info tab
+            #                     children=[
+            #
+            #                     ])
+            # ]),
+            # # dhtml.P("This is tab 1!", className="card-text"),
+            # # dbc.Button("Click here", color="success"),
         ]),
     className="mt-3",)
 ctrlPanelCard = dbc.Card(dbc.CardBody(
@@ -364,23 +383,24 @@ myApp.layout = dhtml.Div([
         dbc.Col(dbc.Container(dbc.Col(children=graphSection)), width=9),
 
         dbc.Col(dbc.Container([
-        dbc.Row(id="testID1", children=[dbc.Col(nodeDataCard)],),
-        dbc.Row(dbc.Col(ctrlPanelCard)),
-        #dbc.Row(dbc.Col(dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),))
-        dbc.Row(dbc.Col(dcc.RadioItems(options=[
-            {"label": " Prerequisites", "value": "prerequisites"},
-            {"label": " Postrequisites", "value": "postrequisites"},
-            {"label": " Both", "value": "both"},
-            {"label": " Neither", "value": "neither"},
-                                                ],value='neither', id="reqDropdown1")
-                        ))
-        # dcc.Tab(label='Control Panel', children=
-        #     [
-        #         # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
-        #         dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
-        #         #dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
-        #         #dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
-        #     ])
+            dbc.Row(id="testID1", children=[dbc.Col(nodeDataCard)],),
+
+            #dbc.Row(dbc.Col(ctrlPanelCard)),
+            #dbc.Row(dbc.Col(dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),))
+            dbc.Row(dbc.Col(dcc.RadioItems(options=[
+                {"label": " Prerequisites", "value": "prerequisites"},
+                {"label": " Postrequisites", "value": "postrequisites"},
+                {"label": " Both", "value": "both"},
+                {"label": " Neither", "value": "neither"},
+                                                    ],value='neither', id="reqDropdown1")
+                            ))
+            # dcc.Tab(label='Control Panel', children=
+            #     [
+            #         # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
+            #         dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
+            #         #dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
+            #         #dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
+            #     ])
                                 ], fluid=True), width=3)
     ]),
 
@@ -658,7 +678,19 @@ def generate_stylesheet(node, requisiteDisplayChoice):
 def displayTapNodeData(data):
     if data == None:
         return "select a node to display ORC information here"
-    return str(json.dumps(data, indent=2)).strip("{").strip("}").replace('"','')  # indent=2 ?
+    # print(data)
+    # print(data['id'])
+    #make into a list
+    a=list(data.items())
+    print(a)
+    b=""
+    for thing in a:
+        p=str(thing[0])+": "+str(thing[1])+"\n"
+        # q='\n'
+        b+=p
+    print(b)
+    return b.replace('"','')
+    #return str(json.dumps(data, indent=2)).strip("{").strip("}")#.replace('"','')  # indent=2 ?
 
 
 # for hover over node, pulls node name/title basic info
