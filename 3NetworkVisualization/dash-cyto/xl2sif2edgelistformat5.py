@@ -368,11 +368,11 @@ myApp.layout = dhtml.Div([
         dbc.Row(dbc.Col(ctrlPanelCard)),
         #dbc.Row(dbc.Col(dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),))
         dbc.Row(dbc.Col(dcc.RadioItems(options=[
-            {"label": "Prerequisites", "value": "prerequisites"},
-            {"label": "Postrequisites", "value": "postrequisites"},
-            {"label": "Both", "value": "both"},
-            {"label": "Neither (why would you do this? just click the CLER node)", "value": "neither"},
-                                                ], id="reqDropdown1")
+            {"label": " Prerequisites", "value": "prerequisites"},
+            {"label": " Postrequisites", "value": "postrequisites"},
+            {"label": " Both", "value": "both"},
+            {"label": " Neither", "value": "neither"},
+                                                ],value='neither', id="reqDropdown1")
                         ))
         # dcc.Tab(label='Control Panel', children=
         #     [
@@ -658,7 +658,7 @@ def generate_stylesheet(node, requisiteDisplayChoice):
 def displayTapNodeData(data):
     if data == None:
         return "select a node to display ORC information here"
-    return str(json.dumps(data, indent=2)).strip("{").strip("}")  # indent=2 ?
+    return str(json.dumps(data, indent=2)).strip("{").strip("}").replace('"','')  # indent=2 ?
 
 
 # for hover over node, pulls node name/title basic info
