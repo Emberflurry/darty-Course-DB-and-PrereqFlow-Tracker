@@ -362,19 +362,29 @@ ctrlPanelCard = dbc.Card(dbc.CardBody(
 myApp.layout = dhtml.Div([
     dbc.Row([
         dbc.Col(dbc.Container(dbc.Col(children=graphSection)), width=9),
+
         dbc.Col(dbc.Container([
         dbc.Row(id="testID1", children=[dbc.Col(nodeDataCard)],),
         dbc.Row(dbc.Col(ctrlPanelCard)),
-        dcc.Tab(label='Control Panel', children=[
-                # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
-                dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
-                #dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
-                #dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
-            ])
-    ], fluid=True), width=3)
+        #dbc.Row(dbc.Col(dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),))
+        dbc.Row(dbc.Col(dcc.RadioItems(options=[
+            {"label": "Prerequisites", "value": "prerequisites"},
+            {"label": "Postrequisites", "value": "postrequisites"},
+            {"label": "Both", "value": "both"},
+            {"label": "Neither (why would you do this? just click the CLER node)", "value": "neither"},
+                                                ], id="reqDropdown1")
+                        ))
+        # dcc.Tab(label='Control Panel', children=
+        #     [
+        #         # note: CANT FIND dash reusable components drc so using dcc.Input instead of drc.NamedInput, works
+        #         dcc.Dropdown(['prerequisites', 'postrequisites', 'both', 'neither (why would you do this?)'], 'prerequisites', id='reqDropdown1'),
+        #         #dcc.Input(name='inColor1', id='inputEdgeColor1', type='text', value='#0074D9'),
+        #         #dcc.Input(name='outColor1', id='outputEdgeColor1', type='text', value='#FF4136'),
+        #     ])
+                                ], fluid=True), width=3)
     ]),
 
-])
+]) #full app
 
 
 
@@ -538,7 +548,7 @@ def generate_stylesheet(node, requisiteDisplayChoice):
             prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "fwd")  # FORWARD REQS
         elif requisiteDisplayChoice == 'prerequisites':
             prereqNodes, prereqEdges = nodeBFSTracer(node['id'], "bck")  # BACKWARD REQS
-        elif requisiteDisplayChoice == 'neither (why would you do this?)':
+        elif requisiteDisplayChoice == 'neither':
             prereqNodes, prereqEdges = [node], []  # empty, for testing
 
             curNodeID = node['id']  #NOTE this stuff is required for correct formatting without selection
