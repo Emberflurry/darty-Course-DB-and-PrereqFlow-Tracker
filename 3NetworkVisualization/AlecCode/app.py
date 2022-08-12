@@ -51,7 +51,7 @@ app.layout = html.Div([
     # html.selection
     # dcc.Dropdown(["Whole"] + [key for key in nodes.keys()], list(nodes.keys())[0], id='class_dropdown'),
     dcc.Dropdown(["Whole"] + [key for key in nodes.keys()], "Whole", id='class_dropdown'),
-    dcc.RadioItems(['Prereqs', 'Postreqs', 'Both'], 'Prereqs', id="prereq_selector")
+    dcc.RadioItems(['Prereqs', 'Postreqs', 'Both', 'Neither (what are you doing the whole point is to......nvmd smh my head)'], 'Prereqs', id="prereq_selector")
 
 ])
 
@@ -70,6 +70,7 @@ def create_graph(class_, prereq):
         if prereq == "Prereqs":
             prereq_nodes, prereq_edges = bfs(nodes[class_], nodes, edges, forward=False, nodes_visited=prereq_nodes,
                                              edges_visited=prereq_edges)
+            print(prereq_nodes)
         elif prereq == "Postreqs":
             prereq_nodes, prereq_edges = bfs(nodes[class_], nodes, edges, forward=True, nodes_visited=prereq_nodes,
                                              edges_visited=prereq_edges)
@@ -80,6 +81,10 @@ def create_graph(class_, prereq):
                                              edges_visited=prereq_edges)
             prereq_nodes = prereq_nodes | postreq_nodes
             prereq_edges += postreq_edges
+        elif prereq == "Neither (what are you doing the whole point is to......nvmd smh my head)":
+            prereq_nodes[class_] = nodes[class_]
+            print(prereq_nodes)
+
         return aggregate_elements(prereq_nodes, prereq_edges)
 
 
