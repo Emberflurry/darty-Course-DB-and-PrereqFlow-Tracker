@@ -70,7 +70,6 @@ def create_graph(class_, prereq):
         if prereq == "Prereqs":
             prereq_nodes, prereq_edges = bfs(nodes[class_], nodes, edges, forward=False, nodes_visited=prereq_nodes,
                                              edges_visited=prereq_edges)
-            print(prereq_nodes)
         elif prereq == "Postreqs":
             prereq_nodes, prereq_edges = bfs(nodes[class_], nodes, edges, forward=True, nodes_visited=prereq_nodes,
                                              edges_visited=prereq_edges)
@@ -83,7 +82,6 @@ def create_graph(class_, prereq):
             prereq_edges += postreq_edges
         elif prereq == "Neither (what are you doing the whole point is to......nvmd smh my head)":
             prereq_nodes[class_] = nodes[class_]
-            print(prereq_nodes)
 
         return aggregate_elements(prereq_nodes, prereq_edges)
 
