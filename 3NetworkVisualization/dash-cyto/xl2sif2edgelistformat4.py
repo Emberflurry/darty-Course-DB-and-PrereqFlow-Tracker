@@ -138,7 +138,7 @@ def xl2SIFnetworkcreator(xlWbFilePath, sheetIndex, startingRowOfEdgeEntries, col
     return nodeList, edgeList
 
 
-cprqfile = "C:/Users/John DeForest/PycharmProjects/dartyclassdb1/2IntermediateProcessing/xlDBcleaning/deleteTestExportCURRENT3.xlsx"
+cprqfile = "../../2IntermediateProcessing/xlDBcleaning/deleteTestExportCURRENT3.xlsx"
 
 myNodesLoL, myEdgesLoL = xl2SIFnetworkcreator(cprqfile, 0, 2, 7, 1, 2, 5,
                                               'edgelistOutput3.txt')  # 2nd param: 0 for MATH, 1 for MATH+ENGS
